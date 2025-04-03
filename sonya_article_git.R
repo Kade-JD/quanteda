@@ -1,6 +1,7 @@
 install.packages("rvest")
 install.packages("quanteda.textmodels")
 install.packages("quanteda.textplots")
+install.packages("quanteda.textstats")
 library(pdftools)
 library(quanteda)
 library(readtext)
@@ -16,6 +17,7 @@ library(viridis)
 library(mapview)
 library(maps)
 library(quanteda.textplots)
+library(quanteda.textstats)
 getwd()
 
 #cnn1 pre-processing phase
@@ -149,8 +151,8 @@ view(dataframe.fox1.categories)
 filter.fox1.categories <- filter(dataframe.fox1.categories) #filter variables
 filter.fox1.categories 
 view(filter.fox1.categories)
-#semantic analysis
-fox_custom_key_words <- c("sonya","massey","grayson","officer","kill*","justified*","just*","fault*","cop*","officer*","violation*","policy")
+#semantic analysis 
+fox_custom_key_words <- c("sonya","massey","grayson","officer","kill*","justified*","just*","fault*","cop*","officer*","violation*","policy","evidence*","character*","value*","interpret*")
 sonya_key_custom_fox1 <- tokens_select(sonya_nostop_fox1, pattern = fox_custom_key_words) #choose keywords to analyze
 sonya.dfm.fox1.key <- dfm(sonya_key_custom_fox1)
 sonya.fox1.lsa <- textmodel_lsa(sonya.fox1.dfm.custom)
@@ -159,10 +161,13 @@ sonya.fox1.lsa$features
 dataframe.fox1.lsa.features <- data.frame(sonya.fox1.lsa$features)
 view(dataframe.fox1.lsa.features)
 barplot(sonya.fox1.lsa$features)
+network.sonya.fox1 <- textplot_network(sonya.dfm.fox1.key)
+sonya.fox1.textstat <- quanteda.textstats::textstat_keyness(sonya.fox1.dfm.custom)
+textplot_keyness(sonya.fox1.textstat, show_reference = TRUE, show_legend = TRUE, n=20L, min_count = 2L, margin = 0.05, color = c("gray","darkblue"), labelcolor = "gray30", labelsize = 4, font = NULL)
+textplot_keyness()
+textplot_influence()
 predict.fox1 <- predict(sonya.fox1.lsa)
 predict.fox1
-textplot_network(sonya.dfm.fox1.key)
-textplot_influence(sonya.fox1.dfm.custom)
 #keywords
 kw_water_fox1 <- kwic(sonya_token_fox1, pattern =  "water") #searching for the word in association with other words
 print(kw_water_fox1)
@@ -181,7 +186,7 @@ sonya_fox1_comments <- "C:/Users/kadej/Dropbox/Quanteda/fox1comments.txt"
 sonya_fox1_page_comments <- readtext(sonya_fox1_comments) 
 print(sonya_fox1_page_comments)
 #Generate Corpus
-corpus_sonya_fox1_comments <- corpus(sonya_fox1_page_comments) #make corpus
+corpus_sonya_fox1_comments <- (corpus(sonya_fox1_page_comments)) #make corpus
 print(corpus_sonya_fox1_comments)
 summary(corpus_sonya_fox1_comments)
 head(docvars(corpus_sonya_fox1_comments))
@@ -196,12 +201,42 @@ sonya_custom_fox1_comments <- tokens_select(sonya_nonpunc_fox1_comments, pattern
 print(sonya_custom_fox1_comments)
 #dataframe
 sonya.dfm.fox1.comments <- dfm(sonya_nostop_fox1_comments) #put the text into a dataframe matrix
+sonya.dfm.fox1.comments
 sonya.fox1.comments.frequency <- topfeatures(sonya.dfm.fox1.comments, n = 10) #asked for the top 10 words in article
 print(sonya.fox1.comments.frequency)
 sonya.fox1.comments.dfm.custom <- dfm(sonya_custom_fox1_comments)
 sonya.fox1.comments.frequency.custom <- topfeatures(sonya.fox1.comments.dfm.custom, n = 10)
 print(sonya.fox1.comments.frequency.custom)
-
+#table
+dataframe.fox1.comments <- data.frame(sonya.fox1.comments.frequency.custom)
+colnames(dataframe.fox1.comments) <- "frequency"
+view(dataframe.fox1.comments)
+dataframe.fox1.comments.organized <- tibble::rownames_to_column(dataframe.fox1.comments, var = "topwords")
+view(dataframe.fox1.comments.organized)
+dataframe.fox1.comments.categories <- dataframe.fox1.comments.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+view(dataframe.fox1.comments.categories)
+filter.fox1.comments.categories <- filter(dataframe.fox1.comments.categories) #filter variables
+filter.fox1.comments.categories 
+view(filter.fox1.comments.categories)
+#semantic analysis
+fox_custom_key_words <- c("sonya","massey","grayson","officer","kill*","justified*","just*","fault*","cop*","officer*","violation*","policy","evidence*","character*","value*","interpret*")
+sonya_key_custom_fox1_comments <- tokens_select(sonya_nostop_fox1_comments, pattern = fox_custom_key_words) #choose keywords to analyze
+sonya.dfm.fox1.comments.key <- dfm(sonya_key_custom_fox1_comments)
+sonya.dfm.fox1.comments.key
+sonya.fox1.comments.lsa <- textmodel_lsa(sonya.dfm.fox1.comments.key)
+sonya.fox1.comments.lsa$matrix_low_rank
+sonya.fox1.comments.lsa$features
+dataframe.fox1.comments.lsa.features <- data.frame(sonya.fox1.comments.lsa$features)
+view(dataframe.fox1.comments.lsa.features)
+barplot(sonya.fox1.comments.lsa$features)
+network.sonya.comments.fox1 <- textplot_network(sonya.dfm.fox1.comments.key)
+sonya.fox1.comments.textstat <- quanteda.textstats::textstat_keyness(sonya.fox1.comments.dfm.custom)
+textplot_keyness(sonya.fox1.comments.textstat, show_reference = TRUE, show_legend = TRUE, n=20L, min_count = 2L, margin = 0.05, color = c("gray","darkblue"), labelcolor = "gray30", labelsize = 4, font = NULL)
 #keywords
 kw_water_fox1_comments <- kwic(sonya_token_fox1_comments, pattern =  "water") #searching for the word in association with other words
 print(kw_water_fox1_comments)
