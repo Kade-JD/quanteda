@@ -32,6 +32,8 @@ library(stringr)
 library(rvest)
 library(ggplot2)
 library(dplyr)
+library(here)
+here::i_am("reports/working_with_comments.Rmd")
 ```
 
 # Uploading comments
@@ -39,7 +41,7 @@ library(dplyr)
 We'll first want to upload the comments and ensure they are in the correct format for data cleaning and analysis.
 
 ```{r}
-fox_comments <- readtext("../quanteda/fox1comments.txt")
+fox_comments <- readtext("../fox1comments.txt")
 str(fox_comments) # check the structure of the object
 ```
 
