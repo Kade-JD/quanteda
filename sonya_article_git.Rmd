@@ -408,7 +408,7 @@ filter.fox1.comments.categories
 View(filter.fox1.comments.categories)
 ```
 
-####semantic analysis
+####semantic analysis 
 
 ```{r, message=F, warning=F}
 sonya.dfm.fox1.comments <- dfm(sonya_remove_fox1_comments)
