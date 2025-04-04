@@ -1,0 +1,83 @@
+---
+title: "Working with comments"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true  # Enable floating TOC in the sidebar
+    number_sections: true
+    theme: cerulean
+    always_allow_html: true
+    self_contained: true
+editor_options:
+  chunk_output_type: console
+  markdown:
+    wrap: sentence
+---
+
+```{r setup, include=F}
+knitr:: opts_chunk$set(echo = TRUE)
+```
+
+# Libraries and packages
+
+Load the libraries we needed. Be sure to `install.packages()` where needed.
+
+```{r, message=F, warning=F}
+#install.packages("rvest", repos = "https://cloud.r-project.org")
+library(pdftools)
+library(quanteda)
+library(readtext)
+library(stringr)
+library(rvest)
+library(ggplot2)
+library(dplyr)
+library(here)
+here::i_am("reports/working_with_comments.Rmd")
+```
+
+# Uploading comments
+
+We'll first want to upload the comments and ensure they are in the correct format for data cleaning and analysis.
+
+```{r}
+fox_comments <- readtext("../fox1comments.txt")
+str(fox_comments) # check the structure of the object
+```
+
+Based on the structure, we want to extrac the `text` column from the data.frame.
+
+```{r}
+fox_comments_raw <- fox_comments$text
+str(fox_comments_raw)
+# View(fox_comments_raw) # view the comments
+```
+
+```{r}
+# Split the text by nReply
+chunks <- strsplit(fox_comments_raw, "\nReply")[[1]]
+
+# trim whitespace from each chunk
+chunks <- trimws(chunks)
+
+# view the different chunks we have created
+chunks
+```
+
+Then we want to go through a series of removing any ancillary text.
+
+I notice that at the start of each chunk, there are various symbols. I will remove those up to the final syntax which tends to be a `\n`
+
+```{r}
+# extract everything after the final "\n"
+cleaned_chunks <- str_extract(chunks, "[^\n]+$")
+cleaned_chunks
+```
+
+You may want to conduct further extractions as needed.
+
+You will also need to remove ancillary lines, like 83 which says "1 reply" prior to analysis.
+
+
+
+
