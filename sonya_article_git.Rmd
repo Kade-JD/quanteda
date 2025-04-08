@@ -332,6 +332,7 @@ sonya_threat_fox1 <- tokens_select(sonya_nostop_fox1, pattern = c("speak*","depu
 print(sonya_threat_fox1)
 ```
 
+
 ### FOX 1 Comments (n=60)
 #### Import FOX 1 Comments data
 
@@ -518,7 +519,7 @@ View(filter.fox2.categories)
 #### Semantic Analysis
 
 ```{r, message=F, warning=F}
-fox_custom_key_words <- c("sonya","massey","grayson","officer","kill*","justified*","just*","fault*","cop*","officer*","violation*","policy")
+fox_custom_key_words <- c("sonya","massey","grayson","officer","kill*","justified*","just*","fault*","cop*","officer*","violation*","policy","she","her","deserve*")
 sonya_key_custom_fox2 <- tokens_select(sonya_nostop_fox2, pattern = fox_custom_key_words) #choose keywords to analyze
 sonya.dfm.fox2.key <- dfm(sonya_key_custom_fox2)
 sonya.fox2.lsa <- textmodel_lsa(sonya.fox2.dfm.custom)
@@ -747,7 +748,7 @@ print(sonya_threat_wapo1)
 
 
 ### Washington Post 1 Comments 
-
+#### Import Data
 ```{r, message=F, warning=F}
 sonya_wapo1_comments <- "C:/Users/kadej/Dropbox/Quanteda/wapo1comments.txt"
 sonya_wapo1_page_comments <- readtext(sonya_wapo1_comments) 
@@ -812,6 +813,7 @@ filter.wapo1.comments.categories <- filter(dataframe.wapo1.comments.categories) 
 filter.wapo1.comments.categories 
 View(filter.wapo1.comments.categories)
 ```
+
 
 
 ### Washington Post 2 Article
@@ -894,6 +896,7 @@ print(sonya_nostop_wapo2)
 sonya_threat_wapo2 <- tokens_select(sonya_nostop_wapo2, pattern = c("speak*","deputy*"), padding = TRUE, window = 5) #view words associated with key words
 print(sonya_threat_wapo2)
 ```
+
 
 
 ### washington Post 2 Comments
@@ -1378,6 +1381,27 @@ sonya.nytimes1.frequency.custom <- topfeatures(sonya.nytimes1.dfm.custom, n = 10
 print(sonya.nytimes1.frequency.custom)
 ```
 
+#### Table
+
+```{r, message=F, warning=F}
+dataframe.nytimes1 <- data.frame(sonya.nytimes1.frequency.custom)
+colnames(dataframe.nytimes1) <- "frequency"
+#view(dataframe.nytimes1)
+dataframe.nytimes1.organized <- tibble::rownames_to_column(dataframe.nytimes1, var = "topwords")
+view(dataframe.nytimes1.organized)
+dataframe.nytimes1.categories <- dataframe.nytimes1.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+view(dataframe.nytimes1.categories)
+filter.nytimes1.categories <- filter(dataframe.nytimes1.categories) #filter variables
+filter.nytimes1.categories 
+View(filter.nytimes1.categories)
+```
+
+
 #### Choose keywords to analyze
 
 ```{r, message=F, warning=F}
@@ -1439,6 +1463,25 @@ sonya.nytimes2.frequency.custom <- topfeatures(sonya.nytimes2.dfm.custom, n = 10
 print(sonya.nytimes2.frequency.custom)
 ```
 
+#### Table
+```{r, message=F, warning=F}
+dataframe.nytimes2 <- data.frame(sonya.nytimes2.frequency.custom)
+colnames(dataframe.nytimes2) <- "frequency"
+#view(dataframe.nytimes1)
+dataframe.nytimes2.organized <- tibble::rownames_to_column(dataframe.nytimes2, var = "topwords")
+view(dataframe.nytimes2.organized)
+dataframe.nytimes2.categories <- dataframe.nytimes2.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+view(dataframe.nytimes2.categories)
+filter.nytimes2.categories <- filter(dataframe.nytimes2.categories) #filter variables
+filter.nytimes2.categories 
+View(filter.nytimes2.categories)
+```
+
 #### Keywords
 
 ```{r, message=F, warning=F}
@@ -1481,7 +1524,7 @@ sonya_nostop_nytimes2_comments <- tokens_select(sonya_nonpunc_nytimes2_comments,
 print(sonya_nostop_nytimes2_comments)
 ```
 
-#### Removce Custom Words
+#### Remove Custom Words
 
 ```{r, message=F, warning=F}
 nytimes2_comments_custom_stop_words <- c("reply","july","replies", "share","comments","recommended","expand_more","wrre","recommendshare","flag","commented","s","m")
@@ -1499,3 +1542,117 @@ sonya.nytimes2.comments.dfm.custom <- dfm(sonya_custom_nytimes2_comments)
 sonya.nytimes2.comments.frequency.custom <- topfeatures(sonya.nytimes2.comments.dfm.custom, n = 10)
 print(sonya.nytimes2.comments.frequency.custom)
 ```
+
+#### Table
+```{r, message=F, warning=F}
+dataframe.nytimes2.comments <- data.frame(sonya.nytimes2.comments.frequency.custom)
+colnames(dataframe.nytimes2.comments) <- "frequency"
+#view(dataframe.nytimes1)
+dataframe.nytimes2.comments.organized <- tibble::rownames_to_column(dataframe.nytimes2.comments, var = "topwords")
+view(dataframe.nytimes2.comments.organized)
+dataframe.nytimes2.comments.categories <- dataframe.nytimes2.comments.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+view(dataframe.nytimes2.comments.categories)
+filter.nytimes2.comments.categories <- filter(dataframe.nytimes2.comments.categories) #filter variables
+filter.nytimes2.comments.categories 
+View(filter.nytimes2.comments.categories)
+```
+
+
+# Table Merging
+
+## Fox 1
+```{r, message = FALSE, warning = FALSE}
+summary_fox1_article <- data.frame(dataframe.fox1.categories %>%
+  group_by(Group) %>%
+  filter(Group %in% c("victim", "officer")) %>%
+  summarize(fox1_article_frequency = sum(frequency)))
+view(summary_fox1_article)
+
+summary_fox1_comments <- data.frame(dataframe.fox1.comments.categories %>%
+  group_by(Group) %>% 
+  filter(Group %in% c("victim", "officer")) %>%
+  summarize(fox1_comments_frequency = sum(frequency)))
+view(summary_fox1_comments)
+
+merged_fox1 <- merge(summary_fox1_article, summary_fox1_comments) 
+view(merged_fox1)
+```
+
+## Fox 2
+```{r, message = FALSE, warning = FALSE}
+summary_fox2_article <- data.frame(dataframe.fox2.categories %>%
+  group_by(Group) %>%
+  filter(Group %in% c("victim", "officer")) %>%
+  summarize(fox2_article_frequency = sum(frequency)))
+view(summary_fox2_article)
+
+summary_fox2_comments <- data.frame(dataframe.fox2.comments.categories %>%
+  group_by(Group) %>% 
+  filter(Group %in% c("victim", "officer")) %>%
+  summarize(fox2_comments_frequency = sum(frequency)))
+view(summary_fox2_comments)
+
+merged_fox2 <- merge(summary_fox2_article, summary_fox2_comments) 
+view(merged_fox2)
+```
+
+## Washington Post 1
+```{r, message = FALSE, warning = FALSE}
+summary_wapo1_article <- data.frame(dataframe.wapo1.categories %>%
+  group_by(Group) %>%
+  filter(Group %in% c("victim", "officer")) %>%
+  summarize(wapo1_article_frequency = sum(frequency)))
+view(summary_wapo1_article)
+
+summary_wapo1_comments <- data.frame(dataframe.wapo1.comments.categories %>%
+  group_by(Group) %>% 
+  filter(Group %in% c("victim", "officer")) %>%
+  summarize(wapo1_comments_frequency = sum(frequency)))
+view(summary_wapo1_comments)
+
+merged_wapo1 <- merge(summary_wapo1_article, summary_wapo1_comments) 
+view(merged_wapo1)
+```
+
+## Washington Post 2
+
+```{r, message = FALSE, warning = FALSE}
+summary_wapo2_article <- data.frame(dataframe.wapo2.categories %>%
+  group_by(Group) %>%
+  filter(Group %in% c("victim", "officer")) %>%
+  summarize(wapo2_article_frequency = sum(frequency)))
+view(summary_wapo2_article)
+
+summary_wapo2_comments <- data.frame(dataframe.wapo2.comments.categories %>%
+  group_by(Group) %>% 
+  filter(Group %in% c("victim", "officer")) %>%
+  summarize(wapo2_comments_frequency = sum(frequency)))
+view(summary_wapo2_comments)
+
+merged_wapo2 <- merge(summary_wapo2_article, summary_wapo2_comments) 
+view(merged_wapo2)
+```
+
+## New York Times 2
+```{r, message = FALSE, warning = FALSE}
+summary_nytimes2_article <- data.frame(dataframe.nytimes2.categories %>%
+  group_by(Group) %>%
+  filter(Group %in% c("victim", "officer")) %>%
+  summarize(nytimes2_article_frequency = sum(frequency)))
+view(summary_nytimes2_article)
+
+summary_nytimes2_comments <- data.frame(dataframe.nytimes2.comments.categories %>%
+  group_by(Group) %>% 
+  filter(Group %in% c("victim", "officer")) %>%
+  summarize(nytimes2_comments_frequency = sum(frequency)))
+view(summary_nytimes2_comments)
+
+merged_nytimes2 <- merge(summary_nytimes2_article, summary_nytimes2_comments) 
+view(merged_nytimes2)
+```
+
