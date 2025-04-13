@@ -112,17 +112,17 @@ dataframe.cnn1 <- data.frame(sonya.cnn1.frequency.custom)
 colnames(dataframe.cnn1) <- "frequency"
 #view(dataframe.cnn1)
 dataframe.cnn1.organized <- tibble::rownames_to_column(dataframe.cnn1, var = "topwords")
-view(dataframe.cnn1.organized)
+#view(dataframe.cnn1.organized)
 dataframe.cnn1.categories <- dataframe.cnn1.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
     topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.cnn1.categories)
+#view(dataframe.cnn1.categories)
 filter.cnn1.categories <- filter(dataframe.cnn1.categories) #filter variables
-filter.cnn1.categories 
-View(filter.cnn1.categories)
+#filter.cnn1.categories 
+#View(filter.cnn1.categories)
 ```
 
 #### Choose keywords to analyze
@@ -197,17 +197,17 @@ dataframe.cnn2 <- data.frame(sonya.cnn2.frequency.custom)
 colnames(dataframe.cnn2) <- "frequency"
 #view(dataframe.cnn2)
 dataframe.cnn2.organized <- tibble::rownames_to_column(dataframe.cnn2, var = "topwords")
-view(dataframe.cnn2.organized)
+#view(dataframe.cnn2.organized)
 dataframe.cnn2.categories <- dataframe.cnn2.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
     topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.cnn2.categories)
+#view(dataframe.cnn2.categories)
 filter.cnn2.categories <- filter(dataframe.cnn2.categories) #filter variables
-filter.cnn2.categories 
-View(filter.cnn2.categories)
+#filter.cnn2.categories 
+#View(filter.cnn2.categories)
 ```
 
 #### Choose Keywords
@@ -284,19 +284,19 @@ print(sonya.fox1.frequency.custom)
 ```{r, message=F, warning=F}
 dataframe.fox1 <- data.frame(sonya.fox1.frequency.custom)
 colnames(dataframe.fox1) <- "frequency"
-view(dataframe.fox1)
+#view(dataframe.fox1)
 dataframe.fox1.organized <- tibble::rownames_to_column(dataframe.fox1, var = "topwords")
-view(dataframe.fox1.organized)
+#view(dataframe.fox1.organized)
 dataframe.fox1.categories <- dataframe.fox1.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
     topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.fox1.categories)
+#view(dataframe.fox1.categories)
 filter.fox1.categories <- filter(dataframe.fox1.categories) #filter variables
-filter.fox1.categories 
-View(filter.fox1.categories)
+#filter.fox1.categories 
+#View(filter.fox1.categories)
 ```
 
 #### Semantic Analysis
@@ -314,7 +314,6 @@ barplot(sonya.fox1.lsa$features)
 predict.fox1 <- predict(sonya.fox1.lsa)
 predict.fox1
 textplot_network(sonya.dfm.fox1.key)
-textplot_influence(sonya.fox1.dfm.custom)
 ```
 
 #### Choose keywords to analyze
@@ -393,23 +392,23 @@ dataframe.fox1.comments <- data.frame(sonya.fox1.comments.frequency)
 colnames(dataframe.fox1.comments) <- "frequency"
 #view(dataframe.fox1.comments)
 dataframe.fox1.comments.organized <- tibble::rownames_to_column(dataframe.fox1.comments, var = "topwords")
-view(dataframe.fox1.comments.organized)
+#view(dataframe.fox1.comments.organized)
 dataframe.fox1.comments.categories <- dataframe.fox1.comments.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya","she") ~ "victim",  # For A, B, C -> "first"
-    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy","sheriff","sheriff's","blue") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.fox1.comments.categories)
+#view(dataframe.fox1.comments.categories)
 filter.fox1.comments.categories <- filter(dataframe.fox1.comments.categories) #filter variables
 filter.fox1.comments.categories 
-View(filter.fox1.comments.categories)
+#View(filter.fox1.comments.categories)
 ```
 
 ####semantic analysis 
 
 ```{r, message=F, warning=F}
-sonya.dfm.fox1.comments <- dfm(sonya_remove_fox1_comments)
+sonya.dfm.fox1.comments <- dfm(sonya_nostop_fox1_comments)
 sonya.dfm.fox1.comments
 sonya.fox1.comments.lsa <- textmodel_lsa(sonya.dfm.fox1.comments)
 sonya.fox1.comments.lsa$matrix_low_rank
@@ -422,7 +421,7 @@ View(sonya.dfm.fox1.comments)
 sonya.fox1.comments.textstat <- quanteda.textstats::textstat_keyness(sonya.dfm.fox1.comments)
 textplot_keyness(sonya.fox1.comments.textstat, show_reference = TRUE, show_legend = TRUE, n=20L, min_count = 2L, margin = 0.05, color = c("gray","darkblue"), labelcolor = "gray30", labelsize = 4, font = NULL)
 fox_custom_key_words <- c("sonya","massey","grayson","officer","kill*","justified*","just*","fault*","cop*","officer*","violation*","policy","evidence*","character*","value*","interpret*","she*","water","pot","boil*")
-sonya_key_custom_fox1_comments <- tokens_select(sonya_remove_fox1_comments, pattern = fox_custom_key_words) #choose keywords to analyze
+sonya_key_custom_fox1_comments <- tokens_select(sonya_nostop_fox1_comments, pattern = fox_custom_key_words) #choose keywords to analyze
 sonya.dfm.fox1.comments.key <- dfm(sonya_key_custom_fox1_comments)
 textplot_network(sonya.dfm.fox1.comments.key, n=40)
 ```
@@ -480,7 +479,7 @@ print(sonya_nonpunc_fox2)
 ```{r, message=F, warning=F}
 sonya_nostop_fox2 <- tokens_select(sonya_nonpunc_fox2, pattern = stopwords("en"), selection = "remove") #remove articles
 print(sonya_nostop_fox2)
-fox_custom_stop_words <- c("said", "says")
+fox_custom_stop_words <- c("said", "says","fox","sports","new","york")
 sonya_custom_fox2 <- tokens_select(sonya_nonpunc_fox2, pattern = c((stopwords("en")),(fox_custom_stop_words)), selection = "remove") #remove custom words
 print(sonya_custom_fox2)
 ```
@@ -503,17 +502,18 @@ dataframe.fox2 <- data.frame(sonya.fox2.frequency.custom)
 colnames(dataframe.fox2) <- "frequency"
 #view(dataframe.fox2.comments)
 dataframe.fox2.organized <- tibble::rownames_to_column(dataframe.fox2, var = "topwords")
-view(dataframe.fox2.organized)
+#view(dataframe.fox2.organized)
 dataframe.fox2.categories <- dataframe.fox2.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
-    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy","sheriff","sheriff's") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.fox2.categories)
+#view(dataframe.fox2.categories)
 filter.fox2.categories <- filter(dataframe.fox2.categories) #filter variables
-filter.fox2.categories 
-View(filter.fox2.categories)
+#filter.fox2.categories 
+#write.csv(filter.fox2.categories, file = "fox2article_dataset.csv")
+#View(filter.fox2.categories)
 ```
 
 #### Semantic Analysis
@@ -531,7 +531,6 @@ barplot(sonya.fox2.lsa$features)
 predict.fox2 <- predict(sonya.fox2.lsa)
 predict.fox2
 textplot_network(sonya.dfm.fox2.key)
-textplot_influence(textplot_network(sonya.dfm.fox2.key))
 ```
 
 #### Choose Keywords to Analyze
@@ -598,7 +597,7 @@ print(sonya_nostop_fox2_comments)
 
 ```{r, message=F, warning=F}
 sonya.dfm.fox2.comments <- dfm(sonya_nostop_fox2_comments) #put the text into a dataframe matrix
-sonya.fox2.comments.frequency <- topfeatures(sonya.dfm.fox2.comments, n = 10) #asked for the top 10 words in article
+sonya.fox2.comments.frequency <- topfeatures(sonya.dfm.fox2.comments, n = 25) #asked for the top 10 words in article
 print(sonya.fox2.comments.frequency)
 print(sonya.fox2.comments.frequency)
 ```
@@ -611,17 +610,18 @@ dataframe.fox2.comments <- data.frame(sonya.fox2.comments.frequency)
 colnames(dataframe.fox2.comments) <- "frequency"
 #view(dataframe.fox2.comments)
 dataframe.fox2.comments.organized <- tibble::rownames_to_column(dataframe.fox2.comments, var = "topwords")
-view(dataframe.fox2.comments.organized)
+#view(dataframe.fox2.comments.organized)
 dataframe.fox2.comments.categories <- dataframe.fox2.comments.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
     topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.fox2.comments.categories)
+#view(dataframe.fox2.comments.categories)
 filter.fox2.comments.categories <- filter(dataframe.fox2.comments.categories) #filter variables
-filter.fox2.comments.categories 
-View(filter.fox2.comments.categories)
+#write.csv(filter.fox2.comments.categories, file = "fox2_comments.csv")
+#filter.fox2.comments.categories 
+#View(filter.fox2.comments.categories)
 ```
 
 
@@ -1010,7 +1010,7 @@ print(sonya_nonpunc_abc1)
 ```{r, message=F, warning=F}
 sonya_nostop_abc1 <- tokens_select(sonya_nonpunc_abc1, pattern = stopwords("en"), selection = "remove") #remove articles
 print(sonya_nostop_abc1)
-abc_custom_stop_words <- c("statement", "news","abc")
+abc_custom_stop_words <- c("statement", "news","abc","sangamon","county","state","illinois")
 sonya_custom_abc1 <- tokens_select(sonya_nonpunc_abc1, pattern = c((stopwords("en")),(abc_custom_stop_words)), selection = "remove") #remove custom words
 print(sonya_custom_abc1)
 ```
@@ -1033,17 +1033,17 @@ dataframe.abc1 <- data.frame(sonya.abc1.frequency.custom)
 colnames(dataframe.abc1) <- "frequency"
 #view(dataframe.wapo1)
 dataframe.abc1.organized <- tibble::rownames_to_column(dataframe.abc1, var = "topwords")
-view(dataframe.abc1.organized)
+#view(dataframe.abc1.organized)
 dataframe.abc1.categories <- dataframe.abc1.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
-    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy","sheriff","sheriff's") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.abc1.categories)
+#view(dataframe.abc1.categories)
 filter.abc1.categories <- filter(dataframe.abc1.categories) #filter variables
-filter.abc1.categories 
-View(filter.abc1.categories)
+#filter.abc1.categories 
+#View(filter.abc1.categories)
 ```
 
 #### Choose keywords to analyze
@@ -1099,7 +1099,7 @@ print(sonya_nonpunc_abc2)
 ```{r, message=F, warning=F}
 sonya_nostop_abc2 <- tokens_select(sonya_nonpunc_abc2, pattern = stopwords("en"), selection = "remove") #remove articles
 print(sonya_nostop_abc2)
-abc_custom_stop_words <- c("statement", "news","abc")
+abc_custom_stop_words <- c("statement", "news","abc","sangamon","county","state","illinois","may","2021","also")
 sonya_custom_abc2 <- tokens_select(sonya_nonpunc_abc2, pattern = c((stopwords("en")),(abc_custom_stop_words)), selection = "remove") #remove custom words
 print(sonya_custom_abc2)
 ```
@@ -1123,17 +1123,17 @@ dataframe.abc2 <- data.frame(sonya.abc2.frequency.custom)
 colnames(dataframe.abc2) <- "frequency"
 #view(dataframe.wapo1)
 dataframe.abc2.organized <- tibble::rownames_to_column(dataframe.abc2, var = "topwords")
-view(dataframe.abc2.organized)
+#view(dataframe.abc2.organized)
 dataframe.abc2.categories <- dataframe.abc2.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
-    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy","sheriff","sheriff's") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.abc2.categories)
+#view(dataframe.abc2.categories)
 filter.abc2.categories <- filter(dataframe.abc2.categories) #filter variables
-filter.abc2.categories 
-View(filter.abc2.categories)
+#filter.abc2.categories 
+#View(filter.abc2.categories)
 ```
 
 #### Keywords
@@ -1214,17 +1214,17 @@ dataframe.nbc1 <- data.frame(sonya.nbc1.frequency.custom)
 colnames(dataframe.nbc1) <- "frequency"
 #view(dataframe.nbc1)
 dataframe.nbc1.organized <- tibble::rownames_to_column(dataframe.nbc1, var = "topwords")
-view(dataframe.nbc1.organized)
+#view(dataframe.nbc1.organized)
 dataframe.nbc1.categories <- dataframe.nbc1.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
     topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.nbc1.categories)
+#view(dataframe.nbc1.categories)
 filter.nbc1.categories <- filter(dataframe.nbc1.categories) #filter variables
-filter.nbc1.categories 
-View(filter.nbc1.categories)
+#filter.nbc1.categories 
+#View(filter.nbc1.categories)
 ```
 
 #### Choose keywords to analyze
@@ -1303,17 +1303,17 @@ dataframe.nbc2 <- data.frame(sonya.nbc2.frequency.custom)
 colnames(dataframe.nbc2) <- "frequency"
 #view(dataframe.nbc2)
 dataframe.nbc2.organized <- tibble::rownames_to_column(dataframe.nbc2, var = "topwords")
-view(dataframe.nbc2.organized)
+#view(dataframe.nbc2.organized)
 dataframe.nbc2.categories <- dataframe.nbc2.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
     topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.nbc2.categories)
+#view(dataframe.nbc2.categories)
 filter.nbc2.categories <- filter(dataframe.nbc2.categories) #filter variables
-filter.nbc2.categories 
-View(filter.nbc2.categories)
+#filter.nbc2.categories 
+#View(filter.nbc2.categories)
 ```
 
 #### Choose Keywords
@@ -1388,17 +1388,17 @@ dataframe.nytimes1 <- data.frame(sonya.nytimes1.frequency.custom)
 colnames(dataframe.nytimes1) <- "frequency"
 #view(dataframe.nytimes1)
 dataframe.nytimes1.organized <- tibble::rownames_to_column(dataframe.nytimes1, var = "topwords")
-view(dataframe.nytimes1.organized)
+#view(dataframe.nytimes1.organized)
 dataframe.nytimes1.categories <- dataframe.nytimes1.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
     topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.nytimes1.categories)
+#view(dataframe.nytimes1.categories)
 filter.nytimes1.categories <- filter(dataframe.nytimes1.categories) #filter variables
-filter.nytimes1.categories 
-View(filter.nytimes1.categories)
+#filter.nytimes1.categories 
+#View(filter.nytimes1.categories)
 ```
 
 
@@ -1469,17 +1469,17 @@ dataframe.nytimes2 <- data.frame(sonya.nytimes2.frequency.custom)
 colnames(dataframe.nytimes2) <- "frequency"
 #view(dataframe.nytimes1)
 dataframe.nytimes2.organized <- tibble::rownames_to_column(dataframe.nytimes2, var = "topwords")
-view(dataframe.nytimes2.organized)
+#view(dataframe.nytimes2.organized)
 dataframe.nytimes2.categories <- dataframe.nytimes2.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
     topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.nytimes2.categories)
+#view(dataframe.nytimes2.categories)
 filter.nytimes2.categories <- filter(dataframe.nytimes2.categories) #filter variables
-filter.nytimes2.categories 
-View(filter.nytimes2.categories)
+#filter.nytimes2.categories 
+#View(filter.nytimes2.categories)
 ```
 
 #### Keywords
@@ -1549,74 +1549,146 @@ dataframe.nytimes2.comments <- data.frame(sonya.nytimes2.comments.frequency.cust
 colnames(dataframe.nytimes2.comments) <- "frequency"
 #view(dataframe.nytimes1)
 dataframe.nytimes2.comments.organized <- tibble::rownames_to_column(dataframe.nytimes2.comments, var = "topwords")
-view(dataframe.nytimes2.comments.organized)
+#view(dataframe.nytimes2.comments.organized)
 dataframe.nytimes2.comments.categories <- dataframe.nytimes2.comments.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
     topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.nytimes2.comments.categories)
-filter.nytimes2.comments.categories <- filter(dataframe.nytimes2.comments.categories) #filter variables
-filter.nytimes2.comments.categories 
-View(filter.nytimes2.comments.categories)
+#view(dataframe.nytimes2.comments.categories)
+filter(dataframe.nytimes2.comments.categories) #filter variables
+#filter.nytimes2.comments.categories 
+#View(filter.nytimes2.comments.categories)
 ```
+
 
 
 # Table Merging
 
+## CNN 1
+
+```{r, message = FALSE, warning = FALSE}
+summary_cnn1_article <- data.frame(dataframe.cnn1.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(cnn1_article_frequency = sum(frequency)))
+#view(summary_cnn1_article)
+```
+
+## CNN 2
+
+```{r, message = FALSE< warning = FALSE}
+summary_cnn2_article <- data.frame(dataframe.cnn2.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(cnn2_article_frequency = sum(frequency)))
+#view(summary_cnn2_article)
+```
+
 ## Fox 1
+
 ```{r, message = FALSE, warning = FALSE}
 summary_fox1_article <- data.frame(dataframe.fox1.categories %>%
   group_by(Group) %>%
-  filter(Group %in% c("victim", "officer")) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
   summarize(fox1_article_frequency = sum(frequency)))
-view(summary_fox1_article)
+#view(summary_fox1_article)
+summary_fox1_article$percentage_fox1_article <- round((summary_fox1_article$fox1_article_frequency/sum(summary_fox1_article$fox1_article_frequency))* 100, 2)
+summary_fox1_article$percentage_fox1 <- NULL
+#view(summary_fox1_article)
 
 summary_fox1_comments <- data.frame(dataframe.fox1.comments.categories %>%
   group_by(Group) %>% 
-  filter(Group %in% c("victim", "officer")) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
   summarize(fox1_comments_frequency = sum(frequency)))
-view(summary_fox1_comments)
+#view(summary_fox1_comments)
+summary_fox1_comments$percentage_fox1_comments <- round((summary_fox1_comments$fox1_comments_frequency/sum(summary_fox1_comments$fox1_comments_frequency))* 100, 2)
 
-merged_fox1 <- merge(summary_fox1_article, summary_fox1_comments) 
-view(merged_fox1)
+merged_fox1 <- merge(summary_fox1_article, summary_fox1_comments)
+#view(merged_fox1)
 ```
 
 ## Fox 2
 ```{r, message = FALSE, warning = FALSE}
 summary_fox2_article <- data.frame(dataframe.fox2.categories %>%
   group_by(Group) %>%
-  filter(Group %in% c("victim", "officer")) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
   summarize(fox2_article_frequency = sum(frequency)))
-view(summary_fox2_article)
+#view(summary_fox2_article)
+summary_fox2_article$percentage_fox2_article <- round((summary_fox2_article$fox2_article_frequency/sum(summary_fox2_article$fox2_article_frequency))* 100, 2)
 
 summary_fox2_comments <- data.frame(dataframe.fox2.comments.categories %>%
   group_by(Group) %>% 
-  filter(Group %in% c("victim", "officer")) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
   summarize(fox2_comments_frequency = sum(frequency)))
-view(summary_fox2_comments)
+#view(summary_fox2_comments)
+summary_fox2_comments$percentage_fox2_comments <- round((summary_fox2_comments$fox2_comments_frequency/sum(summary_fox2_comments$fox2_comments_frequency))* 100, 2)
 
-merged_fox2 <- merge(summary_fox2_article, summary_fox2_comments) 
-view(merged_fox2)
+merged_fox2 <- merge(summary_fox2_article, summary_fox2_comments)
+#write.csv(merged_fox2, file = "mergedfox2.csv")
+#view(merged_fox2)
+```
+
+## ABC 1
+
+```{r, message = FALSE< warning = FALSE}
+summary_abc1_article <- data.frame(dataframe.abc1.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(abc1_article_frequency = sum(frequency)))
+#view(summary_abc1_article)
+```
+
+## ABC 2
+
+```{r, message = FALSE< warning = FALSE}
+summary_abc2_article <- data.frame(dataframe.abc2.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(abc2_article_frequency = sum(frequency)))
+#view(summary_abc2_article)
+```
+
+
+## NBC 1
+
+```{r, message = FALSE< warning = FALSE}
+summary_nbc1_article <- data.frame(dataframe.nbc1.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(nbc1_article_frequency = sum(frequency)))
+#view(summary_nbc1_article)
+```
+
+## NBC 2
+
+```{r, message = FALSE< warning = FALSE}
+summary_nbc2_article <- data.frame(dataframe.nbc2.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(nbc2_article_frequency = sum(frequency)))
+#view(summary_nbc2_article)
 ```
 
 ## Washington Post 1
 ```{r, message = FALSE, warning = FALSE}
 summary_wapo1_article <- data.frame(dataframe.wapo1.categories %>%
   group_by(Group) %>%
-  filter(Group %in% c("victim", "officer")) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
   summarize(wapo1_article_frequency = sum(frequency)))
-view(summary_wapo1_article)
+#view(summary_wapo1_article)
+summary_wapo1_article$percentage_wapo1_article <- round((summary_wapo1_article$wapo1_article_frequency/sum(summary_wapo1_article$wapo1_article_frequency))* 100, 2)
 
 summary_wapo1_comments <- data.frame(dataframe.wapo1.comments.categories %>%
   group_by(Group) %>% 
-  filter(Group %in% c("victim", "officer")) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
   summarize(wapo1_comments_frequency = sum(frequency)))
-view(summary_wapo1_comments)
+#view(summary_wapo1_comments)
+summary_wapo1_comments$percentage_wapo1_comments <- round((summary_wapo1_comments$wapo1_comments_frequency/sum(summary_wapo1_comments$wapo1_comments_frequency))* 100, 2)
 
 merged_wapo1 <- merge(summary_wapo1_article, summary_wapo1_comments) 
-view(merged_wapo1)
+#view(merged_wapo1)
 ```
 
 ## Washington Post 2
@@ -1624,35 +1696,162 @@ view(merged_wapo1)
 ```{r, message = FALSE, warning = FALSE}
 summary_wapo2_article <- data.frame(dataframe.wapo2.categories %>%
   group_by(Group) %>%
-  filter(Group %in% c("victim", "officer")) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
   summarize(wapo2_article_frequency = sum(frequency)))
-view(summary_wapo2_article)
+#view(summary_wapo2_article)
+summary_wapo2_article$percentage_wapo2_article <- round((summary_wapo2_article$wapo2_article_frequency/sum(summary_wapo2_article$wapo2_article_frequency))* 100, 2)
 
 summary_wapo2_comments <- data.frame(dataframe.wapo2.comments.categories %>%
   group_by(Group) %>% 
-  filter(Group %in% c("victim", "officer")) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
   summarize(wapo2_comments_frequency = sum(frequency)))
-view(summary_wapo2_comments)
+#view(summary_wapo2_comments)
+summary_wapo2_comments$percentage_wapo2_comments <- round((summary_wapo2_comments$wapo2_comments_frequency/sum(summary_wapo2_comments$wapo2_comments_frequency))* 100, 2)
 
 merged_wapo2 <- merge(summary_wapo2_article, summary_wapo2_comments) 
-view(merged_wapo2)
+#view(merged_wapo2)
+```
+
+
+## New York Times 1
+```{r, message = FALSE, warning = FALSE}
+summary_nytimes1_article <- data.frame(dataframe.nytimes1.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(nytimes1_article_frequency = sum(frequency)))
+#view(summary_nytimes1_article)
 ```
 
 ## New York Times 2
 ```{r, message = FALSE, warning = FALSE}
 summary_nytimes2_article <- data.frame(dataframe.nytimes2.categories %>%
   group_by(Group) %>%
-  filter(Group %in% c("victim", "officer")) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
   summarize(nytimes2_article_frequency = sum(frequency)))
-view(summary_nytimes2_article)
+#view(summary_nytimes2_article)
+summary_nytimes2_article$percentage_nytimes2_article <- round((summary_nytimes2_article$nytimes2_article_frequency/sum(summary_nytimes2_article$nytimes2_article_frequency))* 100, 2)
 
 summary_nytimes2_comments <- data.frame(dataframe.nytimes2.comments.categories %>%
   group_by(Group) %>% 
-  filter(Group %in% c("victim", "officer")) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
   summarize(nytimes2_comments_frequency = sum(frequency)))
-view(summary_nytimes2_comments)
+#view(summary_nytimes2_comments)
+summary_nytimes2_comments$percentage_nytimes2_comments <- round((summary_nytimes2_comments$nytimes2_comments_frequency/sum(summary_nytimes2_comments$nytimes2_comments_frequency)) * 100, 2)
 
-merged_nytimes2 <- merge(summary_nytimes2_article, summary_nytimes2_comments) 
-view(merged_nytimes2)
+merged_nytimes2 <- merge(summary_nytimes2_article, summary_nytimes2_comments)
+#merged_nytimes2
 ```
 
+## Comment Merge
+```{r, message = FALSE, warning = FALSE}
+merged_fox <- merge(merged_fox1, merged_fox2)
+merged_wapo <- merge(merged_wapo1, merged_wapo2)
+merged_pair <- merge(merged_fox, merged_wapo)
+merged_comments <- merge(merged_pair, merged_nytimes2)
+view(merged_comments)
+comments_dataframe <- as.data.frame(t(merged_comments))
+colnames(comments_dataframe) <- as.character(comments_dataframe[1, ])
+comments_dataframe <- comments_dataframe[-1, ]
+rownames(comments_dataframe) <- case_when(rownames(comments_dataframe) == "fox1_article_frequency" ~ "Fox 1 Article",
+                                          rownames(comments_dataframe) == "fox1_comments_frequency" ~ "Fox 1 Comments",
+                                          rownames(comments_dataframe) == "fox2_article_frequency" ~ "Fox 2 Article",
+                                          rownames(comments_dataframe) == "fox2_comments_frequency" ~ "Fox 2 Comments",
+                                          rownames(comments_dataframe) == "wapo1_article_frequency" ~ "Washington Post 1 Article",
+                                          rownames(comments_dataframe) == "wapo1_comments_frequency" ~ "Washington Post 1 Comments",
+                                          rownames(comments_dataframe) == "wapo2_article_frequency" ~ "Washington Post 2 Article",
+                                          rownames(comments_dataframe) == "wapo2_comments_frequency" ~ "Washington Post 2 Comments",
+                                          rownames(comments_dataframe) == "nytimes2_article_frequency" ~ "New York Times 2 Article",
+                                          rownames(comments_dataframe) == "nytimes2_comments_frequency" ~ "New York Times 2 Comments",
+                                          rownames(comments_dataframe) == "percentage_fox1_article" ~ "Fox 1 Article Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_fox1_comments" ~ "Fox 1 Comment Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_fox2_article" ~ "Fox 2 Article Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_fox2_comments" ~ "Fox 2 Comment Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_wapo1_article" ~ "Washington Post 1 Article Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_wapo1_comments" ~ "Washington Post 1 Comment Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_wapo2_article" ~ "Washington Post 2 Article Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_wapo2_comments" ~ "Washington Post 2 Comment Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_nytimes2_article" ~ "New York Times 2 Article Frequency",
+                                          rownames(comments_dataframe) == "percentage_nytimes2_comments" ~ "New York Times 2 Comment Relative Frequency",
+                                          TRUE ~ rownames(comments_dataframe))
+view(comments_dataframe)
+percentage_dataframe <- comments_dataframe[-c(1,3,5,7,9,11,13,15,17,19), ]
+view(percentage_dataframe)
+```
+
+## Plot
+
+```{r, message = FALSE, warning = FALSE}
+merged_comments_plot <- merged_comments[-2, ]
+# Fox 1
+barplot(merged_comments_plot$percentage_fox1_article,
+        names.arg = merged_comments_plot$Group,
+  col = "lightblue",
+  main = "fox 1 article frequency percentage",
+  xlab = "Groups",
+  ylab = "Percentages"
+)
+barplot(merged_comments_plot$percentage_fox1_comments,
+        names.arg = merged_comments_plot$Group,
+  col = "lightblue",
+  main = "fox 1 comments frequency percentage",
+  xlab = "Groups",
+  ylab = "Percentages"
+)
+# Fox 2
+barplot(merged_comments_plot$percentage_fox2_article,
+        names.arg = merged_comments_plot$Group,
+  col = "lightblue",
+  main = "fox 2 article frequency percentage",
+  xlab = "Groups",
+  ylab = "Percentages"
+)
+barplot(merged_comments_plot$percentage_fox2_comments,
+        names.arg = merged_comments_plot$Group,
+  col = "lightblue",
+  main = "fox 2 comments frequency percentage",
+  xlab = "Groups",
+  ylab = "Percentages"
+)
+# Washington Post 1
+barplot(merged_comments_plot$percentage_wapo1_article,
+        names.arg = merged_comments_plot$Group,
+  col = "lightblue",
+  main = "washington post 1 article frequency percentage",
+  xlab = "Groups",
+  ylab = "Percentages"
+)
+barplot(merged_comments_plot$percentage_wapo1_comments,
+        names.arg = merged_comments_plot$Group,
+  col = "lightblue",
+  main = "washington post 1 comments frequency percentage",
+  xlab = "Groups",
+  ylab = "Percentages"
+)
+```
+
+# Chi-Squared
+
+## Fox 1
+```{r,message = FALSE, warning = FALSE}
+fox1_data_c <- summary_fox1_comments %>% 
+  group_by(Group) %>% 
+  select(fox1_comments_frequency)
+fox1_table_data_c <- table(fox1_data_c)
+fox1_chi_square_test_c <- chisq.test(fox1_table_data_c)
+print(fox1_chi_square_test_c)
+
+fox1_data_a <- dataframe.fox1.categories %in% select(Group) %>% select(frequency)
+fox1_table_data_a <- table(fox1_data_a$Group)
+print(fox1_table_data_a)
+fox1_chi_square_test_a <- chisq.test(fox1_table_data_a)
+print(fox1_chi_square_test_a)
+```
+
+## Fox 2
+```{r, message = FALSE, warning = FALSE}
+fox2_data <- dataframe.fox2.comments.categories %>% select(Group)
+fox2_table_data <- table(selected_data$Group)
+print(fox2_table_data)
+fox2_chi_square_test <- chisq.test(fox2_table_data)
+print(fox2_chi_square_test)
+```
