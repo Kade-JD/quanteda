@@ -523,14 +523,14 @@ fox_custom_key_words <- c("sonya","massey","grayson","officer","kill*","justifie
 sonya_key_custom_fox2 <- tokens_select(sonya_nostop_fox2, pattern = fox_custom_key_words) #choose keywords to analyze
 sonya.dfm.fox2.key <- dfm(sonya_key_custom_fox2)
 sonya.fox2.lsa <- textmodel_lsa(sonya.fox2.dfm.custom)
-sonya.fox2.lsa$matrix_low_rank
-sonya.fox2.lsa$features
+#sonya.fox2.lsa$matrix_low_rank
+#sonya.fox2.lsa$features
 dataframe.fox2.lsa.features <- data.frame(sonya.fox2.lsa$features)
-view(dataframe.fox2.lsa.features)
-barplot(sonya.fox2.lsa$features)
+#view(dataframe.fox2.lsa.features)
+#barplot(sonya.fox2.lsa$features)
 predict.fox2 <- predict(sonya.fox2.lsa)
 predict.fox2
-textplot_network(sonya.dfm.fox2.key)
+#textplot_network(sonya.dfm.fox2.key)
 ```
 
 #### Choose Keywords to Analyze
@@ -629,21 +629,21 @@ filter.fox2.comments.categories <- filter(dataframe.fox2.comments.categories) #f
 
 ```{r, message=F, warning=F}
 sonya.dfm.fox2.comments <- dfm(sonya_nostop_fox2_comments)
-sonya.dfm.fox2.comments
+#sonya.dfm.fox2.comments
 sonya.fox2.comments.lsa <- textmodel_lsa(sonya.dfm.fox2.comments)
-sonya.fox2.comments.lsa$matrix_low_rank
-sonya.fox2.comments.lsa$features
+#sonya.fox2.comments.lsa$matrix_low_rank
+#sonya.fox2.comments.lsa$features
 dataframe.fox2.comments.lsa.features <- data.frame(sonya.fox2.comments.lsa$features)
-view(dataframe.fox2.comments.lsa.features)
-barplot(sonya.fox2.comments.lsa$features)
+#view(dataframe.fox2.comments.lsa.features)
+#barplot(sonya.fox2.comments.lsa$features)
 network.sonya.comments.fox2 <- textplot_network(sonya.dfm.fox2.comments)
-View(sonya.dfm.fox2.comments)
+#View(sonya.dfm.fox2.comments)
 sonya.fox2.comments.textstat <- quanteda.textstats::textstat_keyness(sonya.dfm.fox2.comments)
-textplot_keyness(sonya.fox2.comments.textstat, show_reference = TRUE, show_legend = TRUE, n=20L, min_count = 2L, margin = 0.05, color = c("gray","darkblue"), labelcolor = "gray30", labelsize = 4, font = NULL)
+#textplot_keyness(sonya.fox2.comments.textstat, show_reference = TRUE, show_legend = TRUE, n=20L, min_count = 2L, margin = 0.05, color = c("gray","darkblue"), labelcolor = "gray30", labelsize = 4, font = NULL)
 fox_custom_key_words <- c("sonya","massey","grayson","officer","kill*","justified*","just*","fault*","cop*","officer*","violation*","policy","evidence*","character*","value*","interpret*","she*","water","pot","boil*")
 sonya_key_custom_fox2_comments <- tokens_select(sonya_nostop_fox2_comments, pattern = fox_custom_key_words) #choose keywords to analyze
 sonya.dfm.fox2.comments.key <- dfm(sonya_key_custom_fox2_comments)
-textplot_network(sonya.dfm.fox2.comments.key, n=40)
+#textplot_network(sonya.dfm.fox2.comments.key, n=40)
 ```
 
 
@@ -720,17 +720,17 @@ dataframe.wapo1 <- data.frame(sonya.wapo1.frequency.custom)
 colnames(dataframe.wapo1) <- "frequency"
 #view(dataframe.wapo1)
 dataframe.wapo1.organized <- tibble::rownames_to_column(dataframe.wapo1, var = "topwords")
-view(dataframe.wapo1.organized)
+#view(dataframe.wapo1.organized)
 dataframe.wapo1.categories <- dataframe.wapo1.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
     topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.wapo1.categories)
+#view(dataframe.wapo1.categories)
 filter.wapo1.categories <- filter(dataframe.wapo1.categories) #filter variables
-filter.wapo1.categories 
-View(filter.wapo1.categories)
+#filter.wapo1.categories 
+#View(filter.wapo1.categories)
 ```
 
 #### Choose keywords to analyze
@@ -801,17 +801,17 @@ dataframe.wapo1.comments <- data.frame(sonya.wapo1.comments.frequency.custom)
 colnames(dataframe.wapo1.comments) <- "frequency"
 #view(dataframe.wapo1.comments)
 dataframe.wapo1.comments.organized <- tibble::rownames_to_column(dataframe.wapo1.comments, var = "topwords")
-view(dataframe.wapo1.comments.organized)
+#view(dataframe.wapo1.comments.organized)
 dataframe.wapo1.comments.categories <- dataframe.wapo1.comments.organized %>%
   mutate(Group = case_when(
     topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
     topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
     TRUE ~ "other"                            # Default case
   )) 
-view(dataframe.wapo1.comments.categories)
+#view(dataframe.wapo1.comments.categories)
 filter.wapo1.comments.categories <- filter(dataframe.wapo1.comments.categories) #filter variables
-filter.wapo1.comments.categories 
-View(filter.wapo1.comments.categories)
+#filter.wapo1.comments.categories 
+#View(filter.wapo1.comments.categories)
 ```
 
 
@@ -1782,6 +1782,11 @@ view(percentage_dataframe)
 
 ```{r, message = FALSE, warning = FALSE}
 merged_comments_plot <- merged_comments[-2, ]
+percentage_dataframe_plot <- cbind(Sources = rownames(percentage_dataframe),percentage_dataframe)
+rownames(percentage_dataframe_plot) <- NULL
+percentage_dataframe_plot <- percentage_dataframe_plot[ ,-3]
+#view(percentage_dataframe_plot)
+
 # Fox 1
 barplot(merged_comments_plot$percentage_fox1_article,
         names.arg = merged_comments_plot$Group,
@@ -1827,6 +1832,44 @@ barplot(merged_comments_plot$percentage_wapo1_comments,
   xlab = "Groups",
   ylab = "Percentages"
 )
+# Washington Post 2
+barplot(merged_comments_plot$percentage_wapo2_article,
+        names.arg = merged_comments_plot$Group,
+  col = "lightblue",
+  main = "washington post 2 article frequency percentage",
+  xlab = "Groups",
+  ylab = "Percentages"
+)
+barplot(merged_comments_plot$percentage_wapo2_comments,
+        names.arg = merged_comments_plot$Group,
+  col = "lightblue",
+  main = "washington post 2 comments frequency percentage",
+  xlab = "Groups",
+  ylab = "Percentages"
+)
+#New York Times 2
+barplot(merged_comments_plot$percentage_nytimes2_article,
+        names.arg = merged_comments_plot$Group,
+  col = "lightblue",
+  main = "New York Times 2 article frequency percentage",
+  xlab = "Groups",
+  ylab = "Percentages"
+)
+barplot(merged_comments_plot$percentage_nytimes2_comments,
+        names.arg = merged_comments_plot$Group,
+  col = "lightblue",
+  main = "New York Times 2 comments frequency percentage",
+  xlab = "Groups",
+  ylab = "Percentages"
+)
+
+#GGPlot groupings
+ggplot(percentage_dataframe_plot, aes(x = Sources, y = `officer`, fill = `Sources`, colour = `Sources`)) + 
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.5)
+
+ggplot(percentage_dataframe_plot, aes(x = Sources, y = `victim`, fill = `Sources`, colour = `Sources`)) + 
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.5)
+
 ```
 
 # Chi-Squared
