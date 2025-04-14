@@ -1,0 +1,1675 @@
+---
+title: "Fighting The Frame: How Framing Police Brutality Influences Blame"
+subtitle: "Your subtitle here (can also remove this line)"
+author: 
+  - name: Kade Davis
+    affil:
+  - name:  
+    affil:
+affiliation:
+  - num: 
+    address: Sociology, Morehouse
+  - num:
+    address:
+  - num:
+    address:
+column_numbers: 3
+logoright_name: img/qs-logo.png
+logoleft_name: img/morehouse-logo.jpg
+titlebox_borderwidth: "0.25cm"
+primary_colour: "#ffffff"
+secondary_colour: "#5F6062"
+accent_colour: "#E51937"
+titlebox_bordercol: "#840028"
+title_textcol: "#840028"
+author_textcol: "#840028"
+affiliation_textcol: "#840028"
+columnline_col: "#000000"
+columnline_style: solid
+sectitle_textcol: "#ffffff"
+sectitle_bgcol: "#840028"
+sectitle_bordercol: "#840028"
+sectitle2_textcol: "#840028"
+output: 
+  - posterdown::posterdown_html
+bibliography: MMUF Research.bib
+---
+
+```{r setup, include=FALSE}
+setwd("C:/Users/kadej/Dropbox/sonya.quanteda")
+getwd()
+knitr::opts_chunk$set(echo = TRUE, fig.width = 12, fig.height = 8)
+#install.packages("pak")
+#install.packages("posterdown")
+#pak::pak('rstudio/pagedown')
+library(readr)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(scales) # For formatting axis labels
+library(here)
+library(pdftools)
+library(quanteda)
+library(readtext)
+library(stringr)
+library(rvest)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(tidycensus)
+library(dplyr)
+library(quanteda.textmodels)
+library(ggplot2)
+library(sf)
+library(viridis)
+library(mapview)
+library(maps)
+library(quanteda.textplots)
+library(quanteda.textstats)
+here::i_am("morehouse-template.Rmd") # if you change the name of your file, update this
+```
+
+```{r, eval=FALSE, include=FALSE}
+# do not remove; this line is to create the PDF version of your poster
+pagedown::chrome_print("morehouse-template.Rmd")
+```
+
+
+# Abstract
+
+Framing has been a prevalent subject within contemporary society, and many scholars have explored its effects on news media. Sociologists, in particular, have made great contributions to the concept; however, there is a significant lack of literature regarding the framing of police brutality in the news. This study explores how the framing of police brutality by legacy news sources affects how the audience assigns blame using semantic analysis to analyze a correlation between themes within articles and their comments.
+
+# Overview
+
+This study will support and demonstrate a connection between Snow’s theory of framing and Tilly’s theory of blame by answering the question: How does the framing of police brutality in legacy news articles  affect the way commenters assign blame to groups involved? This study uses articles produced by legacy news sources regarding Sonya Massey, a Black woman in Springfield, Illinois, shot in her home by two police officers over a dispute regarding a pot of boiling water. Semantic analysis is used to analyze a correlation between themes within articles and their comments. These correlations will then be compared among articles to measure the effects of framing. 
+
+# Literature Review
+
+This study will reinforce the use of Snow’s framing perspective in combination with Tilly’s blame process by highlighting the interdisciplinary relevance of the subjects. Media and sociology scholars approach the concept of framing from differing perspectives but both find that framing significantly affects the lives of those who are framed. Tilly agrees with this argument positing that blame is a key factor in establishing social movements @Roberge2009. Many sociologists support Tilly’s claim that blame plays a heavy role in contributing to the effects of framing and acknowledge its connection to Blame. However, few ground the connection in empirical evidence and focus too heavily on the framing aspect of the study, neglecting the role of blame. 
+
+# Research Questions
+
+1. How does the framing of instances of police brutality by legacy news sources in articles affect which topcis commenters focus on?
+
+H0: The percentage of themes focused on in the comments will be reflective of the topic percentage in the article
+Ha: The percentage of themes focused on in the comments will be different than the topics focused on in the article
+
+2. How does introducing new information affect which themes commenters focus on?
+
+Ha: Introducing new information will affect the amount to which commenters focus on topics in the article
+H0: Introducing new information will have no effect on the topics commenters focus on
+
+# Methodology
+
+This study will analyze legacy news source articles about Sonya Massey. Articles will be gathered from legacy news websites. Legacy news sources have a large following, consistent reliability with experienced editors, and less biased reports than non-legacy sources (@Diel2017). I have chosen to analyze articles about Sonya Massey because she has been one of the most recent and prominent cases of police brutality and has much coverage on social media. This study uses 12 articles from the legacy news sources New York Times, ABC, NBC, Washington Post, Fox News, and CNN. 
+
+## Data
+
+There will be two articles from each news source. “Article 1” will be the oldest article addressing Sonya Massey, and the “Article 2” will be the article directly after the oldest article. This study addresses the first question by finding the frequency of the words in the articles and comments that refer to the themes "Police" or "Massey." The frequency of these themes (measured by the word count)  in the articles are correlated to the themes present within the corresponding article’s comments. There will be a correlational comparison between “article 1” and “article 2” to explore effects of introducing new information. Both will be tested using a chi-square fitness of goodness test. 
+
+
+```{r, include=F}
+sonya_cnn1 <- "https://www.cnn.com/2024/07/22/us/sonya-massey-police-shooting" 
+sonyacnn1page <- read_html(sonya_cnn1) 
+text_data_cnn1 <- html_text(html_nodes(sonyacnn1page, "p")) # Extract all text within the <p> tags
+print(text_data_cnn1)  #Print the extracted text
+```
+
+
+```{r, include=F}
+corpus_sonyacnn1 <- corpus(text_data_cnn1)
+corpus_sonyacnn1 <- # REMOVING LAST THREE TEXTS DUE TO CONTENT
+  corpus_subset(corpus_sonyacnn1, 
+                !(docnames(corpus_sonyacnn1) %in% c(paste("text",60:62,sep=""))))
+tail(corpus_sonyacnn1)
+head(corpus_sonyacnn1)
+head(corpus_sonyacnn1)
+print(corpus_sonyacnn1)
+summary(corpus_sonyacnn1)
+head(docvars(corpus_sonyacnn1))
+```
+
+
+```{r,  include=F}
+sonya_tokencnn1 <- tokens(corpus_sonyacnn1) #tokenized the pdf text
+sonya_nonpunc_cnn1 <- tokens(text_data_cnn1, remove_punct = TRUE) #remove punctuation
+print(sonya_nonpunc_cnn1)
+```
+
+
+```{r,  include=F}
+sonya_nostop_cnn1 <- tokens_select(sonya_nonpunc_cnn1, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_cnn1)
+cnn_custom_stop_words <- c("said", "says")
+sonya_custom_cnn1 <- tokens_select(sonya_nonpunc_cnn1, pattern = c((stopwords("en")),(cnn_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_cnn1)
+```
+
+
+```{r,  include=F}
+sonya.dfm.cnn1 <- dfm(sonya_nostop_cnn1) #put the text into a dataframe matrix
+sonya.cnn1.frequency <- topfeatures(sonya.dfm.cnn1, n = 10) #asked for the top 10 words in article
+print(sonya.cnn1.frequency)
+sonya.cnn1.dfm.custom <- dfm(sonya_custom_cnn1)
+sonya.cnn1.frequency.custom <- topfeatures(sonya.cnn1.dfm.custom, n = 10)
+print(sonya.cnn1.frequency.custom)
+```
+
+
+```{r,  include=F}
+dataframe.cnn1 <- data.frame(sonya.cnn1.frequency.custom)
+colnames(dataframe.cnn1) <- "frequency"
+#view(dataframe.cnn1)
+dataframe.cnn1.organized <- tibble::rownames_to_column(dataframe.cnn1, var = "topwords")
+#view(dataframe.cnn1.organized)
+dataframe.cnn1.categories <- dataframe.cnn1.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.cnn1.categories)
+filter.cnn1.categories <- filter(dataframe.cnn1.categories) #filter variables
+#filter.cnn1.categories 
+#View(filter.cnn1.categories)
+```
+
+
+```{r,  include=F}
+kw_water_cnn1 <- kwic(sonya_tokencnn1, pattern =  "water") #searching for the word in association with other words
+print(kw_water_cnn1)
+kw_justification_cnn1 <- kwic(sonya_tokencnn1, pattern = phrase("boiling water*")) #phrase meaning
+print(kw_justification_cnn1)
+sonya_nostop_cnn1 <- tokens_select(sonya_nonpunc_cnn1, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_cnn1)
+sonya_threat_cnn1 <- tokens_select(sonya_nostop_cnn1, pattern = c("speak*","deputy*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_cnn1)
+```
+
+
+```{r,  include=F}
+sonya_cnn2 <- "https://www.cnn.com/2024/07/23/us/sonya-massey-police-shooting-what-went-wrong/index.html" 
+sonyacnn2page <- read_html(sonya_cnn2) 
+text_data_cnn2 <- html_text(html_nodes(sonyacnn2page, "p")) # Extract all text within the <p> tags
+print(text_data_cnn2)  #Print the extracted text
+```
+
+
+```{r,  include=F}
+corpus_sonyacnn2 <- corpus(text_data_cnn2)
+corpus_sonyacnn2 <- # REMOVING LAST THREE TEXTS DUE TO CONTENT
+  corpus_subset(corpus_sonyacnn2, 
+                !(docnames(corpus_sonyacnn2) %in% c("text57", "text58")))
+tail(corpus_sonyacnn2)
+print(corpus_sonyacnn2)
+summary(corpus_sonyacnn2)
+head(docvars(corpus_sonyacnn2))
+```
+
+
+```{r,  include=F}
+sonya_tokencnn2 <- tokens(corpus_sonyacnn2) #tokenized the pdf text
+sonya_nonpunc_cnn2 <- tokens(sonya_tokencnn2, remove_punct = TRUE) #remove punctuation
+print(sonya_nonpunc_cnn2)
+```
+
+
+```{r,  include=F}
+sonya_nostop_cnn2 <- tokens_select(sonya_nonpunc_cnn2, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_cnn2)
+cnn_custom_stop_words <- c("said", "says")
+sonya_custom_cnn2 <- tokens_select(sonya_nonpunc_cnn2, pattern = c((stopwords("en")),(cnn_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_cnn2)
+```
+
+
+```{r,  include=F}
+sonya.dfm.cnn2 <- dfm(sonya_nostop_cnn2) #put the text into a dataframe matrix
+sonya.cnn2.frequency <- topfeatures(sonya.dfm.cnn2, n = 10) #asked for the top 10 words in article
+print(sonya.cnn2.frequency)
+sonya.cnn2.dfm.custom <- dfm(sonya_custom_cnn2)
+sonya.cnn2.frequency.custom <- topfeatures(sonya.cnn2.dfm.custom, n = 10)
+print(sonya.cnn2.frequency.custom)
+```
+
+
+```{r,  include=F}
+dataframe.cnn2 <- data.frame(sonya.cnn2.frequency.custom)
+colnames(dataframe.cnn2) <- "frequency"
+#view(dataframe.cnn2)
+dataframe.cnn2.organized <- tibble::rownames_to_column(dataframe.cnn2, var = "topwords")
+#view(dataframe.cnn2.organized)
+dataframe.cnn2.categories <- dataframe.cnn2.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.cnn2.categories)
+filter.cnn2.categories <- filter(dataframe.cnn2.categories) #filter variables
+#filter.cnn2.categories 
+#View(filter.cnn2.categories)
+```
+
+
+```{r,  include=F}
+kw_water_cnn2 <- kwic(sonya_tokencnn2, pattern =  "water") #searching for the word in association with other words
+print(kw_water_cnn2)
+kw_rebuke_cnn2 <- kwic(sonya_tokencnn2, pattern =  "rebuke")
+print(kw_rebuke_cnn2)
+kw_justification_cnn2 <- kwic(sonya_tokencnn2, pattern = phrase("boiling water*")) #phrase meaning
+print(kw_justification_cnn2)
+sonya_threat_cnn2 <- tokens_select(sonya_nostop_cnn2, pattern = c("speak*","deputy*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_cnn2)
+```
+
+
+```{r,  include=F}
+sonya_fox1 <- "https://www.foxnews.com/us/bodycam-video-reveals-chaotic-scene-deputy-fatally-shooting-sonya-massey-called-911-help" 
+sonya_fox1_page <- read_html(sonya_fox1) 
+text_data_fox1 <- html_text(html_nodes(sonya_fox1_page, "p")) # Extract all text within the <p> tags
+print(text_data_fox1)
+```
+
+
+```{r,  include=F}
+corpus_sonyafox1 <- corpus(text_data_fox1)
+corpus_sonyafox1 <- # REMOVING LAST THREE TEXTS DUE TO CONTENT
+  corpus_subset(corpus_sonyafox1, 
+                !(docnames(corpus_sonyafox1) %in% c(paste("text",33:42,sep=""))))
+tail(corpus_sonyafox1)
+head(corpus_sonyafox1)
+print(corpus_sonyafox1)
+summary(corpus_sonyafox1)
+head(docvars(corpus_sonyafox1))
+```
+
+
+```{r,  include=F}
+sonya_token_fox1 <- tokens(corpus_sonyafox1) #tokenized the pdf text
+sonya_nonpunc_fox1 <- tokens(text_data_fox1, remove_punct = TRUE) #remove punctuation
+print(sonya_nonpunc_fox1)
+
+```
+
+
+```{r,  include=F}
+sonya_nostop_fox1 <- tokens_select(sonya_nonpunc_fox1, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_fox1)
+fox_custom_stop_words <- c("said", "says")
+sonya_custom_fox1 <- tokens_select(sonya_nonpunc_fox1, pattern = c((stopwords("en")),(fox_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_fox1)
+```
+
+
+```{r,  include=F}
+sonya.dfm.fox1 <- dfm(sonya_nostop_fox1) #put the text into a dataframe matrix
+sonya.fox1.frequency <- topfeatures(sonya.dfm.fox1, n = 10) #asked for the top 10 words in article
+print(sonya.fox1.frequency)
+sonya.fox1.dfm.custom <- dfm(sonya_custom_fox1)
+sonya.fox1.frequency.custom <- topfeatures(sonya.fox1.dfm.custom, n = 10)
+print(sonya.fox1.frequency.custom)
+```
+
+
+```{r,  include=F}
+dataframe.fox1 <- data.frame(sonya.fox1.frequency.custom)
+colnames(dataframe.fox1) <- "frequency"
+#view(dataframe.fox1)
+dataframe.fox1.organized <- tibble::rownames_to_column(dataframe.fox1, var = "topwords")
+#view(dataframe.fox1.organized)
+dataframe.fox1.categories <- dataframe.fox1.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.fox1.categories)
+filter.fox1.categories <- filter(dataframe.fox1.categories) #filter variables
+#filter.fox1.categories 
+#View(filter.fox1.categories)
+```
+
+
+```{r,  include=F}
+fox_custom_key_words <- c("sonya","massey","grayson","officer","kill*","justified*","just*","fault*","cop*","officer*","violation*","policy")
+sonya_key_custom_fox1 <- tokens_select(sonya_nostop_fox1, pattern = fox_custom_key_words) #choose keywords to analyze
+sonya.dfm.fox1.key <- dfm(sonya_key_custom_fox1)
+sonya.fox1.lsa <- textmodel_lsa(sonya.fox1.dfm.custom)
+sonya.fox1.lsa$matrix_low_rank
+sonya.fox1.lsa$features
+dataframe.fox1.lsa.features <- data.frame(sonya.fox1.lsa$features)
+view(dataframe.fox1.lsa.features)
+barplot(sonya.fox1.lsa$features)
+predict.fox1 <- predict(sonya.fox1.lsa)
+predict.fox1
+textplot_network(sonya.dfm.fox1.key)
+```
+
+
+```{r,  include=F}
+kw_water_fox1 <- kwic(sonya_token_fox1, pattern =  "water") #searching for the word in association with other words
+print(kw_water_fox1)
+kw_rebuke_fox1 <- kwic(sonya_token_fox1, pattern =  "rebuke")
+print(kw_rebuke_fox1)
+kw_justification_fox1 <- kwic(sonya_token_fox1, pattern = phrase("boiling water*")) #phrase meaning
+print(kw_justification_fox1)
+sonya_nostop_fox1 <- tokens_select(sonya_nonpunc_fox1, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_fox1)
+sonya_threat_fox1 <- tokens_select(sonya_nostop_fox1, pattern = c("speak*","deputy*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_fox1)
+```
+
+
+
+```{r,  include=F}
+sonya_fox1_comments <- readtext("C:/Users/kadej/Dropbox/sonya.quanteda/fox1comments.txt") 
+str(sonya_fox1_comments)
+sonya_fox1_comments_raw <- sonya_fox1_comments$text
+str(sonya_fox1_comments_raw)
+chunks <- strsplit(sonya_fox1_comments_raw, "\nReply")[[1]]
+fox1_chunks <- trimws(chunks)
+fox1_chunks
+fox1_cleaned_chunks <- str_extract(fox1_chunks, "[^\n]+$")
+fox1_cleaned_chunks
+library(stringr)
+```
+
+
+```{r,  include=F}
+corpus_sonya_fox1_comments <- corpus(fox1_cleaned_chunks) #make corpus
+print(corpus_sonya_fox1_comments)
+summary(corpus_sonya_fox1_comments)
+head(corpus_sonya_fox1_comments)
+```
+
+
+```{r,  include=F}
+sonya_token_fox1_comments <- tokens(corpus_sonya_fox1_comments) #tokenized the pdf text
+sonya_nonpunc_fox1_comments <- tokens(corpus_sonya_fox1_comments, remove_punct = TRUE, remove_numbers = TRUE) #remove punctuation and numbers
+print(sonya_nonpunc_fox1_comments)
+fox1_remove <- c("See more","Reply")
+sonya_nostop_fox1_comments <- tokens_select(sonya_nonpunc_fox1_comments, pattern = c(stopwords("en"), fox1_remove), selection = "remove") #remove articles
+print(sonya_nostop_fox1_comments)
+```
+
+
+```{r,  include=F}
+#fox1_comments_custom_stop_words <- c("see","reply","july","replies", "share","show","back","years","like")
+#sonya_custom_fox1_comments <- tokens_select(sonya_remove_fox1_comments, pattern = c((stopwords("en")),(fox1_comments_custom_stop_words)), selection = "remove") #remove custom words
+#print(sonya_custom_fox1_comments)
+```
+
+
+```{r,  include=F}
+sonya.dfm.fox1.comments <- dfm(sonya_nostop_fox1_comments) #put the text into a dataframe matrix
+sonya.fox1.comments.frequency <- topfeatures(sonya.dfm.fox1.comments, n = 25) #asked for the top 10 words in article
+print(sonya.fox1.comments.frequency)
+print(sonya.fox1.comments.frequency)
+```
+
+
+```{r,  include=F}
+dataframe.fox1.comments <- data.frame(sonya.fox1.comments.frequency)
+colnames(dataframe.fox1.comments) <- "frequency"
+#view(dataframe.fox1.comments)
+dataframe.fox1.comments.organized <- tibble::rownames_to_column(dataframe.fox1.comments, var = "topwords")
+#view(dataframe.fox1.comments.organized)
+dataframe.fox1.comments.categories <- dataframe.fox1.comments.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya","she") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy","sheriff","sheriff's","blue") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.fox1.comments.categories)
+filter.fox1.comments.categories <- filter(dataframe.fox1.comments.categories) #filter variables
+filter.fox1.comments.categories 
+#View(filter.fox1.comments.categories)
+```
+
+
+```{r,  include=F}
+sonya.dfm.fox1.comments <- dfm(sonya_nostop_fox1_comments)
+sonya.dfm.fox1.comments
+sonya.fox1.comments.lsa <- textmodel_lsa(sonya.dfm.fox1.comments)
+sonya.fox1.comments.lsa$matrix_low_rank
+sonya.fox1.comments.lsa$features
+dataframe.fox1.comments.lsa.features <- data.frame(sonya.fox1.comments.lsa$features)
+#view(dataframe.fox1.comments.lsa.features)
+barplot(sonya.fox1.comments.lsa$features)
+network.sonya.comments.fox1 <- textplot_network(sonya.dfm.fox1.comments)
+#View(sonya.dfm.fox1.comments)
+sonya.fox1.comments.textstat <- quanteda.textstats::textstat_keyness(sonya.dfm.fox1.comments)
+#textplot_keyness(sonya.fox1.comments.textstat, show_reference = TRUE, show_legend = TRUE, n=20L, min_count = 2L, margin = 0.05, color = c("gray","darkblue"), labelcolor = "gray30", labelsize = 4, font = NULL)
+fox_custom_key_words <- c("sonya","massey","grayson","officer","kill*","justified*","just*","fault*","cop*","officer*","violation*","policy","evidence*","character*","value*","interpret*","she*","water","pot","boil*")
+sonya_key_custom_fox1_comments <- tokens_select(sonya_nostop_fox1_comments, pattern = fox_custom_key_words) #choose keywords to analyze
+sonya.dfm.fox1.comments.key <- dfm(sonya_key_custom_fox1_comments)
+#textplot_network(sonya.dfm.fox1.comments.key, n=40)
+```
+
+
+```{r,  include=F}
+kw_water_fox1_comments <- kwic(sonya_token_fox1_comments, pattern =  "water") #searching for the word in association with other words
+print(kw_water_fox1_comments)
+kw_rebuke_fox1_comments <- kwic(sonya_token_fox1_comments, pattern =  "rebuke")
+print(kw_rebuke_fox1_comments)
+kw_justification_fox1_comments <- kwic(sonya_token_fox1_comments, pattern = phrase("boiling water*")) #phrase meaning
+print(kw_justification_fox1_comments)
+sonya_nostop_fox1_comments <- tokens_select(sonya_nonpunc_fox1_comments, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_fox1)
+sonya_threat_fox1_comments <- tokens_select(sonya_nostop_fox1_comments, pattern = c("speak*","deputy*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_fox1_comments)
+```
+
+
+```{r,  include=F}
+sonya_fox2 <- "https://www.foxnews.com/sports/yankees-marcus-stroman-speaks-out-following-fatal-shooting-sonya-massey-sad-society-were-living-in" 
+sonya_fox2_page <- read_html(sonya_fox2) 
+text_data_fox2 <- html_text(html_nodes(sonya_fox2_page, "p")) # Extract all text within the <p> tags
+print(text_data_fox2)
+```
+
+
+```{r,  include=F}
+corpus_sonyafox2 <- corpus(text_data_fox2)
+corpus_sonyafox2 <- # REMOVING LAST THREE TEXTS DUE TO CONTENT
+  corpus_subset(corpus_sonyafox2, 
+                !(docnames(corpus_sonyafox2) %in% c(paste("text",1:2,sep=""),paste("text",19:28,sep=""))))
+tail(corpus_sonyafox2)
+head(corpus_sonyafox2)
+print(corpus_sonyafox2)
+summary(corpus_sonyafox2)
+head(docvars(corpus_sonyafox2))
+```
+
+
+```{r,  include=F}
+sonya_token_fox2 <- tokens(corpus_sonyafox2) #tokenized the pdf text
+sonya_nonpunc_fox2 <- tokens(text_data_fox2, remove_punct = TRUE) #remove punctuation
+print(sonya_nonpunc_fox2)
+```
+
+
+```{r,  include=F}
+sonya_nostop_fox2 <- tokens_select(sonya_nonpunc_fox2, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_fox2)
+fox_custom_stop_words <- c("said", "says","fox","sports","new","york")
+sonya_custom_fox2 <- tokens_select(sonya_nonpunc_fox2, pattern = c((stopwords("en")),(fox_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_fox2)
+```
+
+
+```{r,  include=F}
+sonya.dfm.fox2 <- dfm(sonya_nostop_fox2) #put the text into a dataframe matrix
+sonya.fox2.frequency <- topfeatures(sonya.dfm.fox2, n = 10) #asked for the top 10 words in article
+print(sonya.fox2.frequency)
+sonya.fox2.dfm.custom <- dfm(sonya_custom_fox2)
+sonya.fox2.frequency.custom <- topfeatures(sonya.fox2.dfm.custom, n = 10)
+print(sonya.fox2.frequency.custom)
+```
+
+
+```{r,  include=F}
+dataframe.fox2 <- data.frame(sonya.fox2.frequency.custom)
+colnames(dataframe.fox2) <- "frequency"
+#view(dataframe.fox2.comments)
+dataframe.fox2.organized <- tibble::rownames_to_column(dataframe.fox2, var = "topwords")
+#view(dataframe.fox2.organized)
+dataframe.fox2.categories <- dataframe.fox2.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy","sheriff","sheriff's") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.fox2.categories)
+filter.fox2.categories <- filter(dataframe.fox2.categories) #filter variables
+#filter.fox2.categories 
+#write.csv(filter.fox2.categories, file = "fox2article_dataset.csv")
+#View(filter.fox2.categories)
+```
+
+
+```{r,  include=F}
+fox_custom_key_words <- c("sonya","massey","grayson","officer","kill*","justified*","just*","fault*","cop*","officer*","violation*","policy","she","her","deserve*")
+sonya_key_custom_fox2 <- tokens_select(sonya_nostop_fox2, pattern = fox_custom_key_words) #choose keywords to analyze
+sonya.dfm.fox2.key <- dfm(sonya_key_custom_fox2)
+sonya.fox2.lsa <- textmodel_lsa(sonya.fox2.dfm.custom)
+#sonya.fox2.lsa$matrix_low_rank
+#sonya.fox2.lsa$features
+dataframe.fox2.lsa.features <- data.frame(sonya.fox2.lsa$features)
+#view(dataframe.fox2.lsa.features)
+#barplot(sonya.fox2.lsa$features)
+predict.fox2 <- predict(sonya.fox2.lsa)
+predict.fox2
+#textplot_network(sonya.dfm.fox2.key)
+```
+
+
+```{r,  include=F}
+kw_water_fox2 <- kwic(sonya_token_fox2, pattern =  "water") #searching for the word in association with other words
+print(kw_water_fox2)
+kw_rebuke_fox2 <- kwic(sonya_token_fox2, pattern =  "rebuke")
+print(kw_rebuke_fox2)
+kw_justification_fox2 <- kwic(sonya_token_fox2, pattern = phrase("boiling water*")) #phrase meaning
+print(kw_justification_fox2)
+sonya_nostop_fox2 <- tokens_select(sonya_nonpunc_fox2, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_fox2)
+sonya_threat_fox2 <- tokens_select(sonya_nostop_fox2, pattern = c("speak*","deputy*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_fox2)
+```
+
+
+
+```{r, include=F}
+sonya_fox2_comments <- readtext("C:/Users/kadej/Dropbox/sonya.quanteda/fox2comments.txt") 
+str(sonya_fox2_comments)
+sonya_fox2_comments_raw <- sonya_fox2_comments$text
+str(sonya_fox2_comments_raw)
+chunks <- strsplit(sonya_fox2_comments_raw, "\nReply")[[1]]
+fox2_chunks <- trimws(chunks)
+fox2_chunks
+fox2_cleaned_chunks <- str_extract(fox2_chunks, "[^\n]+$")
+fox2_cleaned_chunks
+library(stringr)
+```
+
+
+```{r,  include=F}
+corpus_sonya_fox2_comments <- corpus(fox2_cleaned_chunks) #make corpus
+print(corpus_sonya_fox2_comments)
+summary(corpus_sonya_fox2_comments)
+head(corpus_sonya_fox2_comments)
+```
+
+
+```{r,  include=F}
+sonya_token_fox2_comments <- tokens(corpus_sonya_fox2_comments) #tokenized the pdf text
+sonya_nonpunc_fox2_comments <- tokens(corpus_sonya_fox2_comments, remove_punct = TRUE, remove_numbers = TRUE) #remove punctuation and numbers
+print(sonya_nonpunc_fox2_comments)
+fox_remove <- c("See more","Reply")
+sonya_nostop_fox2_comments <- tokens_select(sonya_nonpunc_fox2_comments, pattern = c(stopwords("en"), fox_remove), selection = "remove") #remove articles
+print(sonya_nostop_fox2_comments)
+```
+
+
+```{r,  include=F}
+#fox2_comments_custom_stop_words <- c("reply","july","replies", "share","see","like","comment")
+#sonya_custom_fox2_comments <- tokens_select(sonya_nonpunc_fox2_comments, pattern = #c((stopwords("en")),(fox2_comments_custom_stop_words)), selection = "remove") #remove custom words
+#print(sonya_custom_fox2_comments)
+```
+
+
+```{r,  include=F}
+sonya.dfm.fox2.comments <- dfm(sonya_nostop_fox2_comments) #put the text into a dataframe matrix
+sonya.fox2.comments.frequency <- topfeatures(sonya.dfm.fox2.comments, n = 25) #asked for the top 10 words in article
+print(sonya.fox2.comments.frequency)
+print(sonya.fox2.comments.frequency)
+```
+
+
+```{r,  include=F}
+dataframe.fox2.comments <- data.frame(sonya.fox2.comments.frequency)
+colnames(dataframe.fox2.comments) <- "frequency"
+#view(dataframe.fox2.comments)
+dataframe.fox2.comments.organized <- tibble::rownames_to_column(dataframe.fox2.comments, var = "topwords")
+#view(dataframe.fox2.comments.organized)
+dataframe.fox2.comments.categories <- dataframe.fox2.comments.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.fox2.comments.categories)
+filter.fox2.comments.categories <- filter(dataframe.fox2.comments.categories) #filter variables
+#write.csv(filter.fox2.comments.categories, file = "fox2_comments.csv")
+#filter.fox2.comments.categories 
+#View(filter.fox2.comments.categories)
+```
+
+
+
+```{r,  include=F}
+sonya.dfm.fox2.comments <- dfm(sonya_nostop_fox2_comments)
+#sonya.dfm.fox2.comments
+sonya.fox2.comments.lsa <- textmodel_lsa(sonya.dfm.fox2.comments)
+#sonya.fox2.comments.lsa$matrix_low_rank
+#sonya.fox2.comments.lsa$features
+dataframe.fox2.comments.lsa.features <- data.frame(sonya.fox2.comments.lsa$features)
+#view(dataframe.fox2.comments.lsa.features)
+#barplot(sonya.fox2.comments.lsa$features)
+network.sonya.comments.fox2 <- textplot_network(sonya.dfm.fox2.comments)
+#View(sonya.dfm.fox2.comments)
+sonya.fox2.comments.textstat <- quanteda.textstats::textstat_keyness(sonya.dfm.fox2.comments)
+#textplot_keyness(sonya.fox2.comments.textstat, show_reference = TRUE, show_legend = TRUE, n=20L, min_count = 2L, margin = 0.05, color = c("gray","darkblue"), labelcolor = "gray30", labelsize = 4, font = NULL)
+fox_custom_key_words <- c("sonya","massey","grayson","officer","kill*","justified*","just*","fault*","cop*","officer*","violation*","policy","evidence*","character*","value*","interpret*","she*","water","pot","boil*")
+sonya_key_custom_fox2_comments <- tokens_select(sonya_nostop_fox2_comments, pattern = fox_custom_key_words) #choose keywords to analyze
+sonya.dfm.fox2.comments.key <- dfm(sonya_key_custom_fox2_comments)
+#textplot_network(sonya.dfm.fox2.comments.key, n=40)
+```
+
+
+
+```{r,  include=F}
+kw_water_fox1_comments <- kwic(sonya_token_fox1_comments, pattern =  "water") #searching for the word in association with other words
+print(kw_water_fox1_comments)
+kw_rebuke_fox1_comments <- kwic(sonya_token_fox1_comments, pattern =  "rebuke")
+print(kw_rebuke_fox1_comments)
+kw_justification_fox1_comments <- kwic(sonya_token_fox1_comments, pattern = phrase("boiling water*")) #phrase meaning
+print(kw_justification_fox1_comments)
+sonya_nostop_fox1_comments <- tokens_select(sonya_nonpunc_fox1_comments, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_fox1)
+sonya_threat_fox1_comments <- tokens_select(sonya_nostop_fox1_comments, pattern = c("speak*","deputy*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_fox1_comments)
+```
+
+
+
+```{r,  include=F}
+sonya_wapo1 <- "C:/Users/kadej/Dropbox/Quanteda/sonyamassey_wapo1.txt"
+sonya_wapo1_page <- readtext(sonya_wapo1) 
+print(sonya_wapo1_page)
+```
+
+
+```{r,  include=F}
+corpus_sonya_wapo1 <- corpus(sonya_wapo1_page) #make corpus
+print(corpus_sonya_wapo1)
+summary(corpus_sonya_wapo1)
+head(docvars(corpus_sonya_wapo1))
+```
+
+```{r,  include=F}
+sonya_token_wapo1 <- tokens(corpus_sonya_wapo1) #tokenized the pdf text
+sonya_nonpunc_wapo1 <- tokens(corpus_sonya_wapo1, remove_punct = TRUE) #remove punctuation
+print(sonya_nonpunc_wapo1)
+```
+
+
+```{r,  include=F}
+sonya_nostop_wapo1 <- tokens_select(sonya_nonpunc_wapo1, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_wapo1)
+wapo_custom_stop_words <- c("said", "says")
+sonya_custom_wapo1 <- tokens_select(sonya_nonpunc_wapo1, pattern = c((stopwords("en")),(wapo_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_wapo1)
+```
+
+
+```{r,  include=F}
+sonya.dfm.wapo1 <- dfm(sonya_nostop_wapo1) #put the text into a dataframe matrix
+sonya.wapo1.frequency <- topfeatures(sonya.dfm.wapo1, n = 10) #asked for the top 10 words in article
+print(sonya.wapo1.frequency)
+sonya.wapo1.dfm.custom <- dfm(sonya_custom_wapo1)
+sonya.wapo1.frequency.custom <- topfeatures(sonya.wapo1.dfm.custom, n = 10)
+print(sonya.wapo1.frequency.custom)
+```
+
+
+```{r,  include=F}
+dataframe.wapo1 <- data.frame(sonya.wapo1.frequency.custom)
+colnames(dataframe.wapo1) <- "frequency"
+#view(dataframe.wapo1)
+dataframe.wapo1.organized <- tibble::rownames_to_column(dataframe.wapo1, var = "topwords")
+#view(dataframe.wapo1.organized)
+dataframe.wapo1.categories <- dataframe.wapo1.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.wapo1.categories)
+filter.wapo1.categories <- filter(dataframe.wapo1.categories) #filter variables
+#filter.wapo1.categories 
+#View(filter.wapo1.categories)
+```
+
+
+```{r,  include=F}
+kw_water_wapo1 <- kwic(sonya_token_wapo1, pattern =  "water") #searching for the word in association with other words
+print(kw_water_wapo1)
+kw_justification_wapo1 <- kwic(sonya_token_wapo1, pattern = phrase("boiling water*")) #phrase meaning
+print(kw_justification_wapo1)
+sonya_nostop_wapo1 <- tokens_select(sonya_nonpunc_wapo1, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_wapo1)
+sonya_threat_wapo1 <- tokens_select(sonya_nostop_wapo1, pattern = c("speak*","deputy*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_wapo1)
+```
+
+
+```{r,  include=F}
+sonya_wapo1_comments <- "C:/Users/kadej/Dropbox/Quanteda/wapo1comments.txt"
+sonya_wapo1_page_comments <- readtext(sonya_wapo1_comments) 
+print(sonya_wapo1_page_comments)
+```
+
+
+```{r,  include=F}
+corpus_sonya_wapo1_comments <- corpus(sonya_wapo1_page_comments) #make corpus
+print(corpus_sonya_wapo1_comments)
+summary(corpus_sonya_wapo1_comments)
+head(docvars(corpus_sonya_wapo1_comments))
+```
+
+
+```{r,  include=F}
+sonya_token_wapo1_comments <- tokens(corpus_sonya_wapo1_comments) #tokenized the pdf text
+sonya_nonpunc_wapo1_comments <- tokens(corpus_sonya_wapo1_comments, remove_punct = TRUE, remove_numbers = TRUE) #remove punctuation and numbers
+print(sonya_nonpunc_wapo1_comments)
+sonya_nostop_wapo1_comments <- tokens_select(sonya_nonpunc_wapo1_comments, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_wapo1_comments)
+```
+
+
+```{r,  include=F}
+wapo1_comments_custom_stop_words <- c("reply","july","replies", "share","comments","recommended","expand_more","wrre","like")
+sonya_custom_wapo1_comments <- tokens_select(sonya_nonpunc_wapo1_comments, pattern = c((stopwords("en")),(wapo1_comments_custom_stop_words)), selection = "remove") #remove custom words
+```
+
+
+```{r,  include=F}
+print(sonya_custom_wapo1_comments)
+#dataframe
+sonya.dfm.wapo1.comments <- dfm(sonya_nostop_wapo1_comments) #put the text into a dataframe matrix
+sonya.wapo1.comments.frequency <- topfeatures(sonya.dfm.wapo1.comments, n = 10) #asked for the top 10 words in article
+print(sonya.wapo1.comments.frequency)
+sonya.wapo1.comments.dfm.custom <- dfm(sonya_custom_wapo1_comments)
+sonya.wapo1.comments.frequency.custom <- topfeatures(sonya.wapo1.comments.dfm.custom, n = 10)
+print(sonya.wapo1.comments.frequency.custom)
+```
+
+
+```{r,  include=F}
+dataframe.wapo1.comments <- data.frame(sonya.wapo1.comments.frequency.custom)
+colnames(dataframe.wapo1.comments) <- "frequency"
+#view(dataframe.wapo1.comments)
+dataframe.wapo1.comments.organized <- tibble::rownames_to_column(dataframe.wapo1.comments, var = "topwords")
+#view(dataframe.wapo1.comments.organized)
+dataframe.wapo1.comments.categories <- dataframe.wapo1.comments.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.wapo1.comments.categories)
+filter.wapo1.comments.categories <- filter(dataframe.wapo1.comments.categories) #filter variables
+#filter.wapo1.comments.categories 
+#View(filter.wapo1.comments.categories)
+```
+
+
+```{r,  include=F}
+sonya_wapo2 <- "C:/Users/kadej/Dropbox/Quanteda/sonyamassey_wapo2.txt"
+sonya_wapo2_page <- readtext(sonya_wapo2) 
+print(sonya_wapo2_page)
+```
+
+
+```{r,  include=F}
+corpus_sonya_wapo2 <- corpus(sonya_wapo2_page) #make corpus
+print(corpus_sonya_wapo2)
+summary(corpus_sonya_wapo2)
+head(docvars(corpus_sonya_wapo2))
+```
+
+
+```{r,  include=F}
+sonya_token_wapo2 <- tokens(corpus_sonya_wapo2) #tokenized the pdf text
+sonya_nonpunc_wapo2 <- tokens(corpus_sonya_wapo2, remove_punct = TRUE) #remove punctuation
+print(sonya_nonpunc_wapo2)
+```
+
+
+```{r,  include=F}
+sonya_nostop_wapo2 <- tokens_select(sonya_nonpunc_wapo2, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_wapo2)
+wapo_custom_stop_words <- c("said", "says")
+sonya_custom_wapo2 <- tokens_select(sonya_nonpunc_wapo2, pattern = c((stopwords("en")),(wapo_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_wapo2)
+```
+
+
+```{r,  include=F}
+sonya.dfm.wapo2 <- dfm(sonya_nostop_wapo2) #put the text into a dataframe matrix
+sonya.wapo2.frequency <- topfeatures(sonya.dfm.wapo2, n = 10) #asked for the top 10 words in article
+print(sonya.wapo2.frequency)
+sonya.wapo2.dfm.custom <- dfm(sonya_custom_wapo2)
+sonya.wapo2.frequency.custom <- topfeatures(sonya.wapo2.dfm.custom, n = 10)
+print(sonya.wapo2.frequency.custom)
+```
+
+
+```{r,  include=F}
+dataframe.wapo2 <- data.frame(sonya.wapo2.frequency.custom)
+colnames(dataframe.wapo2) <- "frequency"
+#view(dataframe.wapo2.comments)
+dataframe.wapo2.organized <- tibble::rownames_to_column(dataframe.wapo2, var = "topwords")
+view(dataframe.wapo2.organized)
+dataframe.wapo2.categories <- dataframe.wapo2.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+view(dataframe.wapo2.categories)
+filter.wapo2.categories <- filter(dataframe.wapo2.categories) #filter variables
+filter.wapo2.categories 
+View(filter.wapo2.categories)
+```
+
+
+```{r,  include=F}
+kw_water_wapo2 <- kwic(sonya_token_wapo2, pattern =  "water") #searching for the word in association with other words
+print(kw_water_wapo2)
+kw_justification_wapo2 <- kwic(sonya_token_wapo2, pattern = phrase("boiling water*")) #phrase meaning
+print(kw_justification_wapo2)
+sonya_nostop_wapo2 <- tokens_select(sonya_nonpunc_wapo2, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_wapo2)
+sonya_threat_wapo2 <- tokens_select(sonya_nostop_wapo2, pattern = c("speak*","deputy*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_wapo2)
+```
+
+
+```{r,  include=F}
+sonya_wapo2_comments <- "C:/Users/kadej/Dropbox/Quanteda/wapo2comments.txt"
+sonya_wapo2_page_comments <- readtext(sonya_wapo2_comments) 
+print(sonya_wapo2_page_comments)
+```
+
+
+```{r,  include=F}
+corpus_sonya_wapo2_comments <- corpus(sonya_wapo2_page_comments) #make corpus
+print(corpus_sonya_wapo2_comments)
+summary(corpus_sonya_wapo2_comments)
+head(docvars(corpus_sonya_wapo2_comments))
+```
+
+
+```{r,  include=F}
+sonya_token_wapo2_comments <- tokens(corpus_sonya_wapo2_comments) #tokenized the pdf text
+sonya_nonpunc_wapo2_comments <- tokens(corpus_sonya_wapo2_comments, remove_punct = TRUE, remove_numbers = TRUE) #remove punctuation and numbers
+print(sonya_nonpunc_wapo2_comments)
+sonya_nostop_wapo2_comments <- tokens_select(sonya_nonpunc_wapo2_comments, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_wapo2_comments)
+```
+
+
+```{r,  include=F}
+wapo2_comments_custom_stop_words <- c("reply","july","replies", "share","comments","recommended","expand_more","wrre")
+sonya_custom_wapo2_comments <- tokens_select(sonya_nonpunc_wapo2_comments, pattern = c((stopwords("en")),(wapo2_comments_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_wapo2_comments)
+```
+
+
+```{r,  include=F}
+#dataframe
+sonya.dfm.wapo2.comments <- dfm(sonya_nostop_wapo2_comments) #put the text into a dataframe matrix
+sonya.wapo2.comments.frequency <- topfeatures(sonya.dfm.wapo2.comments, n = 10) #asked for the top 10 words in article
+print(sonya.wapo2.comments.frequency)
+sonya.wapo2.comments.dfm.custom <- dfm(sonya_custom_wapo2_comments)
+sonya.wapo2.comments.frequency.custom <- topfeatures(sonya.wapo2.comments.dfm.custom, n = 10)
+print(sonya.wapo2.comments.frequency.custom)
+```
+
+
+```{r,  include=F}
+dataframe.wapo2.comments <- data.frame(sonya.wapo2.comments.frequency.custom)
+colnames(dataframe.wapo2.comments) <- "frequency"
+#view(dataframe.wapo2.comments)
+dataframe.wapo2.comments.organized <- tibble::rownames_to_column(dataframe.wapo2.comments, var = "topwords")
+view(dataframe.wapo2.comments.organized)
+dataframe.wapo2.comments.categories <- dataframe.wapo2.comments.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+view(dataframe.wapo2.comments.categories)
+filter.wapo2.comments.categories <- filter(dataframe.wapo2.comments.categories) #filter variables
+filter.wapo2.comments.categories 
+View(filter.wapo2.comments.categories)
+```
+
+
+
+
+```{r,  include=F}
+sonya_abc1 <- "https://abcnews.go.com/US/illinois-woman-dies-after-shot-deputy-involved-incident/story?id=111880175" 
+sonya_abc1_page <- read_html(sonya_abc1) 
+text_data_abc1 <- html_text(html_nodes(sonya_abc1_page, "p")) # Extract all text within the <p> tags
+print(text_data_abc1)
+```
+
+
+```{r,  include=F}
+corpus_sonyaabc1 <- corpus(text_data_abc1)
+corpus_sonyaabc1 <- # REMOVING LAST THREE TEXTS DUE TO CONTENT
+  corpus_subset(corpus_sonyaabc1, 
+                !(docnames(corpus_sonyaabc1) %in% c("text16")))
+tail(corpus_sonyaabc1)
+head(corpus_sonyaabc1)
+print(corpus_sonyaabc1)
+summary(corpus_sonyaabc1)
+head(docvars(corpus_sonyaabc1))
+```
+
+
+```{r,  include=F}
+sonya_token_abc1 <- tokens(corpus_sonyaabc1) #tokenized the pdf text
+sonya_nonpunc_abc1 <- tokens(text_data_abc1, remove_punct = TRUE) #remove punctuation
+print(sonya_nonpunc_abc1)
+```
+
+
+```{r,  include=F}
+sonya_nostop_abc1 <- tokens_select(sonya_nonpunc_abc1, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_abc1)
+abc_custom_stop_words <- c("statement", "news","abc","sangamon","county","state","illinois")
+sonya_custom_abc1 <- tokens_select(sonya_nonpunc_abc1, pattern = c((stopwords("en")),(abc_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_abc1)
+```
+
+
+```{r,  include=F}
+sonya.dfm.abc1 <- dfm(sonya_nostop_abc1) #put the text into a dataframe matrix
+sonya.abc1.frequency <- topfeatures(sonya.dfm.abc1, n = 10) #asked for the top 10 words in article
+print(sonya.abc1.frequency)
+sonya.abc1.dfm.custom <- dfm(sonya_custom_abc1)
+sonya.abc1.frequency.custom <- topfeatures(sonya.abc1.dfm.custom, n = 10)
+print(sonya.abc1.frequency.custom)
+```
+
+
+```{r,  include=F}
+dataframe.abc1 <- data.frame(sonya.abc1.frequency.custom)
+colnames(dataframe.abc1) <- "frequency"
+#view(dataframe.wapo1)
+dataframe.abc1.organized <- tibble::rownames_to_column(dataframe.abc1, var = "topwords")
+#view(dataframe.abc1.organized)
+dataframe.abc1.categories <- dataframe.abc1.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy","sheriff","sheriff's") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.abc1.categories)
+filter.abc1.categories <- filter(dataframe.abc1.categories) #filter variables
+#filter.abc1.categories 
+#View(filter.abc1.categories)
+```
+
+
+```{r,  include=F}
+kw_water_abc1 <- kwic(sonya_token_abc1, pattern =  "water") #searching for the word in association with other words
+print(kw_water_abc1)
+kw_rebuke_abc1 <- kwic(sonya_token_abc1, pattern =  "rebuke")
+print(kw_rebuke_abc1)
+kw_justification_abc1 <- kwic(sonya_token_abc1, pattern = phrase("boiling water*")) #phrase meaning
+print(kw_justification_abc1)
+sonya_nostop_abc1 <- tokens_select(sonya_nonpunc_abc1, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_abc1)
+sonya_threat_abc1 <- tokens_select(sonya_nostop_abc1, pattern = c("said*","officer*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_abc1)
+```
+
+
+```{r,  include=F}
+sonya_abc2 <- "https://abcnews.go.com/US/deputy-fatally-shot-sonya-massey-discharged-army-misconduct/story?id=112264355" 
+sonya_abc2_page <- read_html(sonya_abc2) 
+text_data_abc2 <- html_text(html_nodes(sonya_abc2_page, "p")) # Extract all text within the <p> tags
+print(text_data_abc2)
+```
+
+
+```{r,  include=F}
+corpus_sonyaabc2 <- corpus(text_data_abc2)
+corpus_sonyaabc2 <- # REMOVING LAST THREE TEXTS DUE TO CONTENT
+  corpus_subset(corpus_sonyaabc2, 
+                !(docnames(corpus_sonyaabc2) %in% c("text28")))
+tail(corpus_sonyaabc2)
+head(corpus_sonyaabc2)
+print(corpus_sonyaabc2)
+summary(corpus_sonyaabc2)
+head(docvars(corpus_sonyaabc2))
+```
+
+
+
+```{r,  include=F}
+sonya_token_abc2 <- tokens(corpus_sonyaabc2) #tokenized the pdf text
+sonya_nonpunc_abc2 <- tokens(text_data_abc2, remove_punct = TRUE) #remove punctuation
+print(sonya_nonpunc_abc2)
+```
+
+
+```{r,  include=F}
+sonya_nostop_abc2 <- tokens_select(sonya_nonpunc_abc2, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_abc2)
+abc_custom_stop_words <- c("statement", "news","abc","sangamon","county","state","illinois","may","2021","also")
+sonya_custom_abc2 <- tokens_select(sonya_nonpunc_abc2, pattern = c((stopwords("en")),(abc_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_abc2)
+```
+
+
+```{r,  include=F}
+#dataframe
+sonya.dfm.abc2 <- dfm(sonya_nostop_abc2) #put the text into a dataframe matrix
+sonya.abc2.frequency <- topfeatures(sonya.dfm.abc2, n = 10) #asked for the top 10 words in article
+print(sonya.abc2.frequency)
+sonya.abc2.dfm.custom <- dfm(sonya_custom_abc2)
+sonya.abc2.frequency.custom <- topfeatures(sonya.abc2.dfm.custom, n = 10)
+print(sonya.abc2.frequency.custom)
+```
+
+
+```{r,  include=F}
+dataframe.abc2 <- data.frame(sonya.abc2.frequency.custom)
+colnames(dataframe.abc2) <- "frequency"
+#view(dataframe.wapo1)
+dataframe.abc2.organized <- tibble::rownames_to_column(dataframe.abc2, var = "topwords")
+#view(dataframe.abc2.organized)
+dataframe.abc2.categories <- dataframe.abc2.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy","sheriff","sheriff's") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.abc2.categories)
+filter.abc2.categories <- filter(dataframe.abc2.categories) #filter variables
+#filter.abc2.categories 
+#View(filter.abc2.categories)
+```
+
+
+```{r,  include=F}
+kw_water_abc2 <- kwic(sonya_token_abc2, pattern =  "water") #searching for the word in association with other words
+print(kw_water_abc2)
+kw_rebuke_abc2 <- kwic(sonya_token_abc2, pattern =  "rebuke")
+print(kw_rebuke_abc2)
+kw_justification_abc2 <- kwic(sonya_token_abc2, pattern = phrase("boiling water*")) #phrase meaning
+print(kw_justification_abc2)
+sonya_nostop_abc2 <- tokens_select(sonya_nonpunc_abc2, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_abc2)
+sonya_threat_abc2 <- tokens_select(sonya_nostop_abc2, pattern = c("said*","officer*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_abc2)
+```
+
+
+```{r,  include=F}
+sonya_nbc1 <- "https://www.nbcnews.com/news/us-news/illinois-woman-called-police-possible-intruder-killed-deputies-attorne-rcna161673"
+sonya_nbc1_page <- read_html(sonya_nbc1) 
+text_data_nbc1 <- html_text(html_nodes(sonya_nbc1_page, "p")) # Extract all text within the <p> tags
+print(text_data_nbc1)
+```
+
+
+```{r,  include=F}
+corpus_sonyanbc1 <- corpus(text_data_nbc1)
+corpus_sonyanbc1 <- # REMOVING LAST THREE TEXTS DUE TO CONTENT
+  corpus_subset(corpus_sonyanbc1, 
+                !(docnames(corpus_sonyanbc1) %in% c(paste("text",1:10,sep=""),paste("text",26:27,sep=""))))
+tail(corpus_sonyanbc1)
+head(corpus_sonyanbc1)
+print(corpus_sonyanbc1)
+summary(corpus_sonyanbc1)
+head(docvars(corpus_sonyanbc1))
+```
+
+
+```{r,  include=F}
+sonya_token_nbc1 <- tokens(corpus_sonyanbc1) #tokenized the pdf text
+sonya_nonpunc_nbc1 <- tokens(text_data_nbc1, remove_punct = TRUE) #remove punctuation
+print(sonya_nonpunc_nbc1)
+```
+
+
+```{r,  include=F}
+sonya_nostop_nbc1 <- tokens_select(sonya_nonpunc_nbc1, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_nbc1)
+nbc_custom_stop_words <- c("said")
+sonya_custom_nbc1 <- tokens_select(sonya_nonpunc_nbc1, pattern = c((stopwords("en")),(nbc_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_nbc1)
+```
+
+```{r,  include=F}
+sonya.dfm.nbc1 <- dfm(sonya_nostop_nbc1) #put the text into a dataframe matrix
+sonya.nbc1.frequency <- topfeatures(sonya.dfm.nbc1, n = 10) #asked for the top 10 words in article
+print(sonya.nbc1.frequency)
+sonya.nbc1.dfm.custom <- dfm(sonya_custom_nbc1)
+sonya.nbc1.frequency.custom <- topfeatures(sonya.nbc1.dfm.custom, n = 10)
+print(sonya.nbc1.frequency.custom)
+```
+
+
+```{r,  include=F}
+dataframe.nbc1 <- data.frame(sonya.nbc1.frequency.custom)
+colnames(dataframe.nbc1) <- "frequency"
+#view(dataframe.nbc1)
+dataframe.nbc1.organized <- tibble::rownames_to_column(dataframe.nbc1, var = "topwords")
+#view(dataframe.nbc1.organized)
+dataframe.nbc1.categories <- dataframe.nbc1.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.nbc1.categories)
+filter.nbc1.categories <- filter(dataframe.nbc1.categories) #filter variables
+#filter.nbc1.categories 
+#View(filter.nbc1.categories)
+```
+
+
+```{r,  include=F}
+kw_water_nbc1 <- kwic(sonya_token_nbc1, pattern =  "just*") #searching for the word in association with other words
+print(kw_water_nbc1)
+kw_rebuke_nbc1 <- kwic(sonya_token_nbc1, pattern =  "Grayson")
+print(kw_rebuke_nbc1)
+kw_justification_nbc1 <- kwic(sonya_token_nbc1, pattern = phrase("kill*")) #phrase meaning
+print(kw_justification_nbc1)
+sonya_nostop_nbc1 <- tokens_select(sonya_nonpunc_nbc1, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_nbc1)
+sonya_threat_nbc1 <- tokens_select(sonya_nostop_nbc1, pattern = c("threat*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_nbc1)
+```
+
+
+
+```{r,  include=F}
+sonya_nbc2 <- "https://www.nbcnews.com/news/us-news/charges-filed-illinois-deputy-death-sonya-massey-rcna162456"
+sonya_nbc2_page <- read_html(sonya_nbc2) 
+text_data_nbc2 <- html_text(html_nodes(sonya_nbc2_page, "p")) # Extract all text within the <p> tags
+print(text_data_nbc2)
+```
+
+
+```{r,  include=F}
+corpus_sonyanbc2 <- corpus(text_data_nbc2)
+corpus_sonyanbc2 <- # REMOVING LAST THREE TEXTS DUE TO CONTENT
+  corpus_subset(corpus_sonyanbc2, 
+                !(docnames(corpus_sonyanbc2) %in% c(paste("text",1:11,sep=""),paste("text",36:38,sep=""))))
+tail(corpus_sonyanbc2)
+head(corpus_sonyanbc2)
+print(corpus_sonyanbc2)
+summary(corpus_sonyanbc2)
+head(docvars(corpus_sonyanbc2))
+```
+
+
+```{r,  include=F}
+sonya_token_nbc2 <- tokens(corpus_sonyanbc2) #tokenized the pdf text
+sonya_nonpunc_nbc2 <- tokens(text_data_nbc2, remove_punct = TRUE) #remove punctuation
+print(sonya_nonpunc_nbc2)
+```
+
+
+```{r,  include=F}
+sonya_nostop_nbc2 <- tokens_select(sonya_nonpunc_nbc2, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_nbc2)
+nbc_custom_stop_words <- c("said")
+sonya_custom_nbc2 <- tokens_select(sonya_nonpunc_nbc2, pattern = c((stopwords("en")),(nbc_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_nbc2)
+```
+
+
+```{r,  include=F}
+sonya.dfm.nbc2 <- dfm(sonya_nostop_nbc2) #put the text into a dataframe matrix
+sonya.nbc2.frequency <- topfeatures(sonya.dfm.nbc2, n = 10) #asked for the top 10 words in article
+print(sonya.nbc2.frequency)
+sonya.nbc2.dfm.custom <- dfm(sonya_custom_nbc2)
+sonya.nbc2.frequency.custom <- topfeatures(sonya.nbc2.dfm.custom, n = 10)
+print(sonya.nbc2.frequency.custom)
+```
+
+
+```{r,  include=F}
+dataframe.nbc2 <- data.frame(sonya.nbc2.frequency.custom)
+colnames(dataframe.nbc2) <- "frequency"
+#view(dataframe.nbc2)
+dataframe.nbc2.organized <- tibble::rownames_to_column(dataframe.nbc2, var = "topwords")
+#view(dataframe.nbc2.organized)
+dataframe.nbc2.categories <- dataframe.nbc2.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.nbc2.categories)
+filter.nbc2.categories <- filter(dataframe.nbc2.categories) #filter variables
+#filter.nbc2.categories 
+#View(filter.nbc2.categories)
+```
+
+
+```{r,  include=F}
+kw_water_nbc2 <- kwic(sonya_token_nbc2, pattern =  "just*") #searching for the word in association with other words
+print(kw_water_nbc2)
+kw_rebuke_nbc2 <- kwic(sonya_token_nbc2, pattern =  "Grayson")
+print(kw_rebuke_nbc2)
+kw_justification_nbc2 <- kwic(sonya_token_nbc2, pattern = phrase("kill*")) #phrase meaning
+print(kw_justification_nbc2)
+sonya_nostop_nbc2 <- tokens_select(sonya_nonpunc_nbc2, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_nbc2)
+sonya_threat_nbc2 <- tokens_select(sonya_nostop_nbc2, pattern = c("threat*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_nbc2)
+```
+
+
+```{r,  include=F}
+sonya_nytimes1 <- "C:/Users/kadej/Dropbox/Quanteda/sonyamassey_nytimes.txt"
+sonya_nytimes1_page <- readtext(sonya_nytimes1) 
+print(sonya_nytimes1_page)
+```
+
+
+```{r,  include=F}
+corpus_sonyanytimes1 <- corpus(sonya_nytimes1_page) #make corpus
+print(corpus_sonyanytimes1)
+summary(corpus_sonyanytimes1)
+head(docvars(corpus_sonyanytimes1))
+```
+
+
+```{r,  include=F}
+sonya_token_nytimes1 <- tokens(corpus_sonyanytimes1) #tokenized the pdf text
+sonya_nonpunc_nytimes1 <- tokens(corpus_sonyanytimes1, remove_punct = TRUE) #remove punctuation
+print(sonya_nonpunc_nytimes1)
+```
+
+
+```{r,  include=F}
+sonya_nostop_nytimes1 <- tokens_select(sonya_nonpunc_nytimes1, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_nytimes1)
+nytimes_custom_stop_words <- c("said","mr","ms")
+sonya_custom_nytimes1 <- tokens_select(sonya_nonpunc_nytimes1, pattern = c((stopwords("en")),(nytimes_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_nytimes1)
+```
+
+
+```{r,  include=F}
+sonya.dfm.nytimes1 <- dfm(sonya_nostop_nytimes1) #put the text into a dataframe matrix
+sonya.nytimes1.frequency <- topfeatures(sonya.dfm.nytimes1, n = 10) #asked for the top 10 words in article
+print(sonya.nytimes1.frequency)
+sonya.nytimes1.dfm.custom <- dfm(sonya_custom_nytimes1)
+sonya.nytimes1.frequency.custom <- topfeatures(sonya.nytimes1.dfm.custom, n = 10)
+print(sonya.nytimes1.frequency.custom)
+```
+
+
+```{r,  include=F}
+dataframe.nytimes1 <- data.frame(sonya.nytimes1.frequency.custom)
+colnames(dataframe.nytimes1) <- "frequency"
+#view(dataframe.nytimes1)
+dataframe.nytimes1.organized <- tibble::rownames_to_column(dataframe.nytimes1, var = "topwords")
+#view(dataframe.nytimes1.organized)
+dataframe.nytimes1.categories <- dataframe.nytimes1.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.nytimes1.categories)
+filter.nytimes1.categories <- filter(dataframe.nytimes1.categories) #filter variables
+#filter.nytimes1.categories 
+#View(filter.nytimes1.categories)
+```
+
+
+
+```{r,  include=F}
+kw_water_nytimes1 <- kwic(sonya_token_nytimes1, pattern =  "water") #searching for the word in association with other words
+print(kw_water_nytimes1)
+kw_justification_nytimes1 <- kwic(sonya_token_nytimes1, pattern = phrase("boiling water*")) #phrase meaning
+print(kw_justification_nytimes1)
+sonya_nostop_nytimes1 <- tokens_select(sonya_nonpunc_nytimes1, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_nytimes1)
+sonya_threat_nytimes1 <- tokens_select(sonya_nostop_nytimes1, pattern = c("speak*","deputy*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_nytimes1)
+```
+
+
+```{r,  include=F}
+sonya_nytimes2 <- "C:/Users/kadej/Dropbox/Quanteda/sonyamassey_nytimes2.txt"
+sonya_nytimes2_page <- readtext(sonya_nytimes2) 
+print(sonya_nytimes2_page)
+```
+
+
+```{r,  include=F}
+corpus_sonyanytimes2 <- corpus(sonya_nytimes2_page) #make corpus
+print(corpus_sonyanytimes2)
+summary(corpus_sonyanytimes2)
+head(docvars(corpus_sonyanytimes2))
+```
+
+
+```{r,  include=F}
+sonya_token_nytimes2 <- tokens(corpus_sonyanytimes2) #tokenized the pdf text
+sonya_nonpunc_nytimes2 <- tokens(corpus_sonyanytimes2, remove_punct = TRUE) #remove punctuation
+print(sonya_nonpunc_nytimes2)
+```
+
+
+```{r,  include=F}
+sonya_nostop_nytimes2 <- tokens_select(sonya_nonpunc_nytimes2, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_nytimes2)
+nytimes_custom_stop_words <- c("said","mr","ms")
+sonya_custom_nytimes2 <- tokens_select(sonya_nonpunc_nytimes2, pattern = c((stopwords("en")),(nytimes_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_nytimes2)
+```
+
+
+```{r,  include=F}
+sonya.dfm.nytimes2 <- dfm(sonya_nostop_nytimes2) #put the text into a dataframe matrix
+sonya.nytimes2.frequency <- topfeatures(sonya.dfm.nytimes2, n = 10) #asked for the top 10 words in article
+print(sonya.nytimes2.frequency)
+sonya.nytimes2.dfm.custom <- dfm(sonya_custom_nytimes2)
+sonya.nytimes2.frequency.custom <- topfeatures(sonya.nytimes2.dfm.custom, n = 10)
+print(sonya.nytimes2.frequency.custom)
+```
+
+```{r,  include=F}
+dataframe.nytimes2 <- data.frame(sonya.nytimes2.frequency.custom)
+colnames(dataframe.nytimes2) <- "frequency"
+#view(dataframe.nytimes1)
+dataframe.nytimes2.organized <- tibble::rownames_to_column(dataframe.nytimes2, var = "topwords")
+#view(dataframe.nytimes2.organized)
+dataframe.nytimes2.categories <- dataframe.nytimes2.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.nytimes2.categories)
+filter.nytimes2.categories <- filter(dataframe.nytimes2.categories) #filter variables
+#filter.nytimes2.categories 
+#View(filter.nytimes2.categories)
+```
+
+
+```{r,  include=F}
+kw_water_nytimes2 <- kwic(sonya_token_nytimes2, pattern =  "water") #searching for the word in association with other words
+print(kw_water_nytimes2)
+kw_justification_nytimes2 <- kwic(sonya_token_nytimes2, pattern = phrase("boiling water*")) #phrase meaning
+print(kw_justification_nytimes2)
+sonya_nostop_nytimes2 <- tokens_select(sonya_nonpunc_nytimes2, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_nytimes2)
+sonya_threat_nytimes2 <- tokens_select(sonya_nostop_nytimes2, pattern = c("speak*","deputy*"), padding = TRUE, window = 5) #view words associated with key words
+print(sonya_threat_nytimes2)
+```
+
+
+```{r,  include=F}
+sonya_nytimes2_comments <- "C:/Users/kadej/Dropbox/Quanteda/nytimes2comments.txt"
+sonya_nytimes2_page_comments <- readtext(sonya_nytimes2_comments) 
+print(sonya_nytimes2_page_comments)
+```
+
+
+```{r,  include=F}
+corpus_sonya_nytimes2_comments <- corpus(sonya_nytimes2_page_comments) #make corpus
+print(corpus_sonya_nytimes2_comments)
+summary(corpus_sonya_nytimes2_comments)
+head(docvars(corpus_sonya_nytimes2_comments))
+```
+
+
+```{r,  include=F}
+sonya_token_nytimes2_comments <- tokens(corpus_sonya_nytimes2_comments) #tokenized the pdf text
+sonya_nonpunc_nytimes2_comments <- tokens(corpus_sonya_nytimes2_comments, remove_punct = TRUE, remove_numbers = TRUE) #remove punctuation and numbers
+print(sonya_nonpunc_nytimes2_comments)
+sonya_nostop_nytimes2_comments <- tokens_select(sonya_nonpunc_nytimes2_comments, pattern = stopwords("en"), selection = "remove") #remove articles
+print(sonya_nostop_nytimes2_comments)
+```
+
+
+```{r,  include=F}
+nytimes2_comments_custom_stop_words <- c("reply","july","replies", "share","comments","recommended","expand_more","wrre","recommendshare","flag","commented","s","m")
+sonya_custom_nytimes2_comments <- tokens_select(sonya_nonpunc_nytimes2_comments, pattern = c((stopwords("en")),(nytimes2_comments_custom_stop_words)), selection = "remove") #remove custom words
+print(sonya_custom_nytimes2_comments)
+```
+
+
+```{r,  include=F}
+sonya.dfm.nytimes2.comments <- dfm(sonya_nostop_nytimes2_comments) #put the text into a dataframe matrix
+sonya.nytimes2.comments.frequency <- topfeatures(sonya.dfm.nytimes2.comments, n = 10) #asked for the top 10 words in article
+print(sonya.nytimes2.comments.frequency)
+sonya.nytimes2.comments.dfm.custom <- dfm(sonya_custom_nytimes2_comments)
+sonya.nytimes2.comments.frequency.custom <- topfeatures(sonya.nytimes2.comments.dfm.custom, n = 10)
+print(sonya.nytimes2.comments.frequency.custom)
+```
+
+```{r,  include=F}
+dataframe.nytimes2.comments <- data.frame(sonya.nytimes2.comments.frequency.custom)
+colnames(dataframe.nytimes2.comments) <- "frequency"
+#view(dataframe.nytimes1)
+dataframe.nytimes2.comments.organized <- tibble::rownames_to_column(dataframe.nytimes2.comments, var = "topwords")
+#view(dataframe.nytimes2.comments.organized)
+dataframe.nytimes2.comments.categories <- dataframe.nytimes2.comments.organized %>%
+  mutate(Group = case_when(
+    topwords %in% c("massey", "water", "pot", "black","woman","unarmed","boiling","boil","sonya") ~ "victim",  # For A, B, C -> "first"
+    topwords %in% c("grayson", "officer", "deputy","police","deputy","enforcement","officers","deputies","cop","cops","violated","policy") ~ "officer",   # For X, Y, Z -> "last"
+    TRUE ~ "other"                            # Default case
+  )) 
+#view(dataframe.nytimes2.comments.categories)
+filter(dataframe.nytimes2.comments.categories) #filter variables
+#filter.nytimes2.comments.categories 
+#View(filter.nytimes2.comments.categories)
+```
+
+```{r, include=F}
+summary_cnn1_article <- data.frame(dataframe.cnn1.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(cnn1_article_frequency = sum(frequency)))
+#view(summary_cnn1_article)
+```
+
+
+```{r, include=F}
+summary_cnn2_article <- data.frame(dataframe.cnn2.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(cnn2_article_frequency = sum(frequency)))
+#view(summary_cnn2_article)
+```
+
+
+```{r, include=F}
+summary_fox1_article <- data.frame(dataframe.fox1.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(fox1_article_frequency = sum(frequency)))
+#view(summary_fox1_article)
+summary_fox1_article$percentage_fox1_article <- round((summary_fox1_article$fox1_article_frequency/sum(summary_fox1_article$fox1_article_frequency))* 100, 2)
+summary_fox1_article$percentage_fox1 <- NULL
+#view(summary_fox1_article)
+
+summary_fox1_comments <- data.frame(dataframe.fox1.comments.categories %>%
+  group_by(Group) %>% 
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(fox1_comments_frequency = sum(frequency)))
+#view(summary_fox1_comments)
+summary_fox1_comments$percentage_fox1_comments <- round((summary_fox1_comments$fox1_comments_frequency/sum(summary_fox1_comments$fox1_comments_frequency))* 100, 2)
+
+merged_fox1 <- merge(summary_fox1_article, summary_fox1_comments)
+#view(merged_fox1)
+```
+
+
+```{r, include=F}
+summary_fox2_article <- data.frame(dataframe.fox2.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(fox2_article_frequency = sum(frequency)))
+#view(summary_fox2_article)
+summary_fox2_article$percentage_fox2_article <- round((summary_fox2_article$fox2_article_frequency/sum(summary_fox2_article$fox2_article_frequency))* 100, 2)
+
+summary_fox2_comments <- data.frame(dataframe.fox2.comments.categories %>%
+  group_by(Group) %>% 
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(fox2_comments_frequency = sum(frequency)))
+#view(summary_fox2_comments)
+summary_fox2_comments$percentage_fox2_comments <- round((summary_fox2_comments$fox2_comments_frequency/sum(summary_fox2_comments$fox2_comments_frequency))* 100, 2)
+
+merged_fox2 <- merge(summary_fox2_article, summary_fox2_comments)
+#write.csv(merged_fox2, file = "mergedfox2.csv")
+#view(merged_fox2)
+```
+
+
+```{r, include=F}
+summary_abc1_article <- data.frame(dataframe.abc1.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(abc1_article_frequency = sum(frequency)))
+#view(summary_abc1_article)
+```
+
+
+```{r, include=F}
+summary_abc2_article <- data.frame(dataframe.abc2.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(abc2_article_frequency = sum(frequency)))
+#view(summary_abc2_article)
+```
+
+
+```{r, include=F}
+summary_nbc1_article <- data.frame(dataframe.nbc1.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(nbc1_article_frequency = sum(frequency)))
+#view(summary_nbc1_article)
+```
+
+
+```{r, include=F}
+summary_nbc2_article <- data.frame(dataframe.nbc2.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(nbc2_article_frequency = sum(frequency)))
+#view(summary_nbc2_article)
+```
+
+```{r, include=F}
+summary_wapo1_article <- data.frame(dataframe.wapo1.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(wapo1_article_frequency = sum(frequency)))
+#view(summary_wapo1_article)
+summary_wapo1_article$percentage_wapo1_article <- round((summary_wapo1_article$wapo1_article_frequency/sum(summary_wapo1_article$wapo1_article_frequency))* 100, 2)
+
+summary_wapo1_comments <- data.frame(dataframe.wapo1.comments.categories %>%
+  group_by(Group) %>% 
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(wapo1_comments_frequency = sum(frequency)))
+#view(summary_wapo1_comments)
+summary_wapo1_comments$percentage_wapo1_comments <- round((summary_wapo1_comments$wapo1_comments_frequency/sum(summary_wapo1_comments$wapo1_comments_frequency))* 100, 2)
+
+merged_wapo1 <- merge(summary_wapo1_article, summary_wapo1_comments) 
+#view(merged_wapo1)
+```
+
+
+```{r, include=F}
+summary_wapo2_article <- data.frame(dataframe.wapo2.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(wapo2_article_frequency = sum(frequency)))
+#view(summary_wapo2_article)
+summary_wapo2_article$percentage_wapo2_article <- round((summary_wapo2_article$wapo2_article_frequency/sum(summary_wapo2_article$wapo2_article_frequency))* 100, 2)
+
+summary_wapo2_comments <- data.frame(dataframe.wapo2.comments.categories %>%
+  group_by(Group) %>% 
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(wapo2_comments_frequency = sum(frequency)))
+#view(summary_wapo2_comments)
+summary_wapo2_comments$percentage_wapo2_comments <- round((summary_wapo2_comments$wapo2_comments_frequency/sum(summary_wapo2_comments$wapo2_comments_frequency))* 100, 2)
+
+merged_wapo2 <- merge(summary_wapo2_article, summary_wapo2_comments) 
+#view(merged_wapo2)
+```
+
+
+```{r, include=F}
+summary_nytimes1_article <- data.frame(dataframe.nytimes1.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(nytimes1_article_frequency = sum(frequency)))
+#view(summary_nytimes1_article)
+```
+
+```{r, include=F}
+summary_nytimes2_article <- data.frame(dataframe.nytimes2.categories %>%
+  group_by(Group) %>%
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(nytimes2_article_frequency = sum(frequency)))
+#view(summary_nytimes2_article)
+summary_nytimes2_article$percentage_nytimes2_article <- round((summary_nytimes2_article$nytimes2_article_frequency/sum(summary_nytimes2_article$nytimes2_article_frequency))* 100, 2)
+
+summary_nytimes2_comments <- data.frame(dataframe.nytimes2.comments.categories %>%
+  group_by(Group) %>% 
+  #filter(Group %in% c("victim", "officer")) %>%
+  summarize(nytimes2_comments_frequency = sum(frequency)))
+#view(summary_nytimes2_comments)
+summary_nytimes2_comments$percentage_nytimes2_comments <- round((summary_nytimes2_comments$nytimes2_comments_frequency/sum(summary_nytimes2_comments$nytimes2_comments_frequency)) * 100, 2)
+
+merged_nytimes2 <- merge(summary_nytimes2_article, summary_nytimes2_comments)
+#merged_nytimes2
+```
+
+```{r, echo=F, warning=F, messages=F}
+merged_fox <- merge(merged_fox1, merged_fox2)
+merged_wapo <- merge(merged_wapo1, merged_wapo2)
+merged_pair <- merge(merged_fox, merged_wapo)
+merged_comments <- merge(merged_pair, merged_nytimes2)
+#view(merged_comments)
+comments_dataframe <- as.data.frame(t(merged_comments))
+colnames(comments_dataframe) <- as.character(comments_dataframe[1, ])
+comments_dataframe <- comments_dataframe[-1, ]
+rownames(comments_dataframe) <- case_when(rownames(comments_dataframe) == "fox1_article_frequency" ~ "Fox 1 Article",
+                                          rownames(comments_dataframe) == "fox1_comments_frequency" ~ "Fox 1 Comments",
+                                          rownames(comments_dataframe) == "fox2_article_frequency" ~ "Fox 2 Article",
+                                          rownames(comments_dataframe) == "fox2_comments_frequency" ~ "Fox 2 Comments",
+                                          rownames(comments_dataframe) == "wapo1_article_frequency" ~ "Washington Post 1 Article",
+                                          rownames(comments_dataframe) == "wapo1_comments_frequency" ~ "Washington Post 1 Comments",
+                                          rownames(comments_dataframe) == "wapo2_article_frequency" ~ "Washington Post 2 Article",
+                                          rownames(comments_dataframe) == "wapo2_comments_frequency" ~ "Washington Post 2 Comments",
+                                          rownames(comments_dataframe) == "nytimes2_article_frequency" ~ "New York Times 2 Article",
+                                          rownames(comments_dataframe) == "nytimes2_comments_frequency" ~ "New York Times 2 Comments",
+                                          rownames(comments_dataframe) == "percentage_fox1_article" ~ "Fox 1 Article Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_fox1_comments" ~ "Fox 1 Comment Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_fox2_article" ~ "Fox 2 Article Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_fox2_comments" ~ "Fox 2 Comment Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_wapo1_article" ~ "Washington Post 1 Article Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_wapo1_comments" ~ "Washington Post 1 Comment Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_wapo2_article" ~ "Washington Post 2 Article Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_wapo2_comments" ~ "Washington Post 2 Comment Relative Frequency",
+                                          rownames(comments_dataframe) == "percentage_nytimes2_article" ~ "New York Times 2 Article Frequency",
+                                          rownames(comments_dataframe) == "percentage_nytimes2_comments" ~ "New York Times 2 Comment Relative Frequency",
+                                          TRUE ~ rownames(comments_dataframe))
+#view(comments_dataframe)
+percentage_dataframe <- comments_dataframe[-c(1,3,5,7,9,11,13,15,17,19), ]
+View(percentage_dataframe)
+knitr::kable(percentage_dataframe)
+```
+
+## Findings
+
+This study found a significant correlation pattern between articles and the comments regarding the topic of Sonya Massey. However, this same correlation significance was not found with the correlations between topics regarding the officers. The study found that 4 of the 5 articles showed a significant correlation between themes regarding Sonya Massey with an average X^2^=2.89 (critical value = 3.84, df=1, p=0.05). This means that the null-hypothesis is accepted.
+
+The findings for the topics regarding officer were different as the study found that none of the articles showed a significant correlation between themes with an average X^2^=32.208 (critical value = 3.84, df=1, p=0.05). This means that the null-hypothesis is rejected.
+
+```{r, echo=F, warning=F, message=F}
+merged_comments_plot <- merged_comments[-2, ]
+percentage_dataframe_plot <- cbind(Sources = rownames(percentage_dataframe),percentage_dataframe)
+rownames(percentage_dataframe_plot) <- NULL
+percentage_dataframe_plot <- percentage_dataframe_plot[ ,-3]
+
+#GGPlot groupings
+ggplot(percentage_dataframe_plot, aes(x = Sources, y = `officer`, fill = `Sources`, colour = `Sources`)) + 
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.5)
+
+ggplot(percentage_dataframe_plot, aes(x = Sources, y = `victim`, fill = `Sources`, colour = `Sources`)) + 
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.5)
+```
