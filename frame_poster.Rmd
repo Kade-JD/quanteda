@@ -1673,3 +1673,7 @@ ggplot(percentage_dataframe_plot, aes(x = Sources, y = `officer`, fill = `Source
 ggplot(percentage_dataframe_plot, aes(x = Sources, y = `victim`, fill = `Sources`, colour = `Sources`)) + 
   geom_bar(stat = "identity", position = "dodge", alpha = 0.5)
 ```
+
+#Discussion
+
+Discuss preliminary findings of qualitative analysis and discuss the importance of a mixed-methods approach and why further research is necessary.
