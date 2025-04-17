@@ -89,7 +89,7 @@ tokens_obj <- doc_corpus %>%
       "\\p{So}",      # Remove symbols/emojis
       "\\p{C}",       # Remove control chars
       "^\\p{Pd}$",    # Remove standalone hyphens
-      #"\\b\\w{1,2}\\b", # Remove 1-2 letter words
+      "\\b\\w{1,2}\\b", # Remove 1-2 letter words
       "comment", # the word comment
       "said", # the word said
       "say", # the word say
@@ -116,8 +116,8 @@ top_features
 
 # After creating tokens_obj and top_features
 saveRDS(tokens_obj, "./data/analysis_objects/tokens.rds")
-saveRDS(top_features, "data/analysis_objects/top_features.rds")
-saveRDS(doc_corpus, "data/analysis_objects/corpus.rds")
+saveRDS(top_features, "./data/analysis_objects/top_features.rds")
+saveRDS(doc_corpus, "./data/analysis_objects/corpus.rds")
 
 # For full reproducibility
 save(

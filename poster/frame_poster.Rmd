@@ -63,6 +63,7 @@ library(sf)
 library(viridis)
 library(mapview)
 library(maps)
+library(kableExtra)
 library(quanteda.textplots)
 library(quanteda.textstats)
 library(fs)
@@ -103,7 +104,7 @@ There will be two articles from each news source. “Article 1” will be the ol
 
 ## Method
 
-```{r}
+```{r, eval=F}
 library(ggplot2)
 library(quanteda.textplots)
 
@@ -135,69 +136,29 @@ load_analysis_object <- function(object_name) {
 ```
 
 ```{r, echo=F, warning=F, messages=F}
-tokens_obj <- load_analysis_object("tokens")
-top_features <- load_analysis_object("top_features")
-doc_corpus <- load_analysis_object("corpus")
+df <- read.csv("./data/analysis_objects/tokens_metadata.csv")
+df
 
+tokens <- read.csv("./data/analysis_objects/tokens.csv")
+tokens
+str(df)
 
 ```
 
-```{r, include=F}
-# 1. TOP FEATURES VISUALIZATION -------------------------------------------
-top_features_df <- data.frame(
-  Term = names(top_features),
-  Frequency = unname(top_features)
-)
+```{r, messages=F, warning=F}
+tokens %>% 
+  as.tibble() %>% 
+  select(doc_id, source, type) %>% 
+  kable()
 ```
-
-```{r, echo=F, messages=F, warning=F}
-ggplot(top_features_df, aes(x = Frequency, y = reorder(Term, Frequency))) +
-  geom_col(fill = "steelblue") +
-  labs(
-    title = "Top 20 Features in Sonya Massey Coverage",
-    x = "Frequency",
-    y = "Term"
-  ) +
-  theme_minimal()
-```
-
-```{r, include=F}
-# 2. SOURCE DISTRIBUTION -------------------------------------------------
-docvars(doc_corpus) %>%
-  count(source) %>%
-  ggplot(aes(x = source, y = n)) +
-  geom_bar(stat = "identity", fill = "darkorange") +
-  labs(
-    title = "Document Distribution by Source",
-    x = "News Source",
-    y = "Count"
-  ) +
-  coord_flip()
-```
-
-```{r, echo=F}
-# 3. WORDCLOUD -----------------------------------------------------------
-set.seed(123)
-textplot_wordcloud(
-  dfm(tokens_obj),
-  min_count = 5,
-  color = c("steelblue", "darkorange", "firebrick")
-)
-
-# 4. TYPE COMPARISON -----------------------------------------------------
-tokens_by_type <- dfm_group(dfm(tokens_obj), groups = type)
-```
-
-```{r, echo=F}
-textplot_keyness(
-  textstat_keyness(tokens_by_type, target = "news_article"),
-  show_legend = FALSE
-) +
-  labs(title = "Keyness Analysis: News Articles vs User Comments")
-```
-
 
 # Findings
+
+```{r}
+
+
+```
+
 
 # Discussion
 
