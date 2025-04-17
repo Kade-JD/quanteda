@@ -1,0 +1,213 @@
+---
+title: "Fighting The Frame: How Framing Police Brutality Influences Blame"
+author: 
+  - name: Kade Davis
+    affil: 1
+  - name: Nathan Alexander, PhD
+    affil: 2, 3
+affiliation:
+  - num: 1
+    address: Department of Sociology, Morehouse College
+  - num: 2
+    address: Department of Curriculum and Instruction, Howard University
+  - num: 3
+    address: Program in Applied Data Science and Analytics, Howard University
+column_numbers: 3
+logoright_name: img/hu-logo.jpg
+logoleft_name: img/morehouse-logo.jpg
+titlebox_borderwidth: "0.35cm"
+primary_colour: "#ffffff"
+secondary_colour: "#5F6062"
+accent_colour: "#E51937"
+titlebox_bordercol: "#840028"
+title_textcol: "#840028"
+author_textcol: "#840028"
+affiliation_textcol: "#840028"
+columnline_col: "#000000"
+columnline_style: solid
+sectitle_textcol: "#ffffff"
+sectitle_bgcol: "#840028"
+sectitle_bordercol: "#840028"
+sectitle2_textcol: "#840028"
+output: 
+  - posterdown::posterdown_html
+bibliography: references.bib
+---
+
+```{r setup, include=FALSE}
+# setwd("C:/Users/kadej/Dropbox/sonya.quanteda")
+# getwd()
+knitr::opts_chunk$set(echo = TRUE, fig.width = 12, fig.height = 8)
+#install.packages("pak")
+#install.packages("posterdown")
+#pak::pak('rstudio/pagedown')
+library(readr)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(scales) # For formatting axis labels
+library(here)
+library(pdftools)
+library(quanteda)
+library(readtext)
+library(stringr)
+library(rvest)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(tidycensus)
+library(dplyr)
+library(quanteda.textmodels)
+library(ggplot2)
+library(sf)
+library(viridis)
+library(mapview)
+library(maps)
+library(kableExtra)
+library(quanteda.textplots)
+library(quanteda.textstats)
+library(fs)
+here::i_am("frame_poster.Rmd") # if you change the name of your file, update this
+```
+
+```{r, eval=FALSE, include=FALSE}
+# do not remove; this line is to create the PDF version of your poster
+pagedown::chrome_print("frame_poster.Rmd")
+```
+
+
+# Overview
+
+This study explores Snow’s Theory of Framing and Tilly’s Theory of Blame by answering the question: *How does the framing of police brutality in legacy news articles relate to the way commenters assign blame to groups and individuals involved?* This study uses articles produced by legacy news sources regarding Sonya Massey, a Black woman in Springfield, Illinois, shot in her home by two police officers over a dispute regarding a pot of boiling water. Exploratory semantic analysis is used to analyze measures between themes within a subset of news articles and their comments. Semantic measures are compared to examine discuss framing and influence. 
+
+# Literature Review
+
+Media and sociology scholars approach the concept of framing from differing perspectives but both find that framing significantly affects the lives of those who are framed. This study will reinforce the use of Snow’s framing perspective in combination with Tilly’s blame process by highlighting the interdisciplinary relevance of the subjects.
+
+## Snow’s Theory of Framing
+
+Please add notes about Snow's Theory of Framing.
+
+## Tilly’s Theory of Blame
+
+Tilly agrees with this argument positing that blame is a key factor in establishing social movements [@Roberge2009]. Many sociologists support Tilly’s claim that blame plays a heavy role in contributing to the effects of framing and acknowledge its connection to Blame. However, few ground the connection in empirical evidence and focus too heavily on the framing aspect of the study, neglecting the role of blame.
+
+---
+
+# Data and Method
+
+This study will analyze legacy news source articles about Sonya Massey. Articles will be gathered from legacy news websites. Legacy news sources have a large following, consistent reliability with experienced editors, and less biased reports than non-legacy sources (@Diel2017). I have chosen to analyze articles about Sonya Massey because she has been one of the most recent and prominent cases of police brutality and has much coverage on social media. This study uses 12 articles from the legacy news sources New York Times, ABC, NBC, Washington Post, Fox News, and CNN. 
+
+## Method
+
+```{r, eval=F, echo=F, warning=F, message=F}
+library(ggplot2)
+library(quanteda.textplots)
+
+analysis_dir <- "./data/analysis_objects"
+
+if(!dir_exists(analysis_dir)) {
+  dir_create(analysis_dir)
+  stop(
+    "Analysis directory created at ", analysis_dir, 
+    "\nPlease run your analysis pipeline to generate objects."
+  )
+}
+
+load_analysis_object <- function(object_name) {
+  file_path <- path(analysis_dir, paste0(object_name, ".rds"))
+  
+  if(!file_exists(file_path)) {
+    stop("File not found: ", file_path, 
+         "\nAvailable files: ", paste(dir_ls(analysis_dir), collapse = "\n"))
+  }
+  
+  tryCatch(
+    readRDS(file_path),
+    error = function(e) {
+      stop("Failed to load ", object_name, ": ", e$message)
+    }
+  )
+}
+```
+
+## Data
+
+There will be two articles from each news source. “Article 1” will be the oldest article addressing Sonya Massey, and the “Article 2” will be the article directly after the oldest article. This study addresses the first question by finding the frequency of the words in the articles and comments that refer to the themes "Police" or "Massey." The frequency of these themes (measured by the word count)  in the articles are correlated to the themes present within the corresponding article’s comments. There will be a correlational comparison between “article 1” and “article 2” to explore effects of introducing new information. Both will be tested using a chi-square fitness of goodness test. 
+
+
+
+```{r, eval=F, echo=F, warning=F, messages=F}
+tokens <- data.frame(
+  doc_id = docnames(tokens_obj),
+  tokens = sapply(as.list(tokens_obj), paste, collapse = "|"),
+  source = docvars(tokens_obj, "source"),
+  type = docvars(tokens_obj, "type"),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r, include=F, warning=F, message=F}
+df <- read.csv("./data/analysis_objects/tokens_metadata.csv")
+df
+
+tokens <- read.csv("./data/analysis_objects/tokens.csv")
+tokens
+str(df)
+
+```
+
+```{r, echo=F, messages=F, warning=F}
+tokens %>% 
+  as.tibble() %>% 
+  select(doc_id, source, type) %>% 
+  kable()
+```
+
+# Findings
+
+```{r, echo=F, warning=F, message=F}
+
+tokens %>%
+  filter(!is.na(type), type != "") %>%
+  count(type) %>%
+  ggplot(aes(reorder(type, n), n)) +
+  geom_col(fill = "#56B4E9", width = 0.7) +
+  geom_text(aes(label = n), hjust = -0.3, size = 3.5) +
+  coord_flip() +
+  labs(title = "Content Type Distribution", 
+       subtitle = "News Articles vs User Comments",
+       x = NULL, y = "Count") +
+  theme_minimal()
+
+
+```
+
+```{r, echo=F, warning=F, message=F}
+library(tidytext)
+
+tokens %>%
+  unnest_tokens(token, tokens, token = "regex", pattern = "\\|") %>%
+  filter(!token %in% c("", " ")) %>%
+  count(token, sort = TRUE) %>%
+  slice_max(n, n = 20) %>%
+  mutate(token = reorder(token, n)) %>%
+  ggplot(aes(n, token)) +
+  geom_col(fill = "#009E73", width = 0.7) +
+  geom_text(aes(label = n), hjust = -0.3, size = 3.5) +
+  labs(title = "Top 20 Term Frequencies", 
+       subtitle = "Across All Documents",
+       x = "Frequency", y = NULL) +
+  theme_minimal()
+
+```
+
+# Discussion
+
+# Conclusion
+
+Framing has been a prevalent subject within contemporary society, and many scholars have explored its effects on news media. Sociologists, in particular, have made great contributions to the concept; however, there is a significant lack of literature regarding the framing of police brutality in the news. This study explores how the framing of police brutality by legacy news sources affects how the audience assigns blame using semantic analysis to analyze a correlation between themes within articles and their comments.
+
+# Acknowledgements
+
+# References
