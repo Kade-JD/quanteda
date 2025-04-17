@@ -98,13 +98,9 @@ Tilly agrees with this argument positing that blame is a key factor in establish
 
 This study will analyze legacy news source articles about Sonya Massey. Articles will be gathered from legacy news websites. Legacy news sources have a large following, consistent reliability with experienced editors, and less biased reports than non-legacy sources (@Diel2017). I have chosen to analyze articles about Sonya Massey because she has been one of the most recent and prominent cases of police brutality and has much coverage on social media. This study uses 12 articles from the legacy news sources New York Times, ABC, NBC, Washington Post, Fox News, and CNN. 
 
-## Data
-
-There will be two articles from each news source. “Article 1” will be the oldest article addressing Sonya Massey, and the “Article 2” will be the article directly after the oldest article. This study addresses the first question by finding the frequency of the words in the articles and comments that refer to the themes "Police" or "Massey." The frequency of these themes (measured by the word count)  in the articles are correlated to the themes present within the corresponding article’s comments. There will be a correlational comparison between “article 1” and “article 2” to explore effects of introducing new information. Both will be tested using a chi-square fitness of goodness test. 
-
 ## Method
 
-```{r, eval=F, warning=F, message=F}
+```{r, eval=F, echo=F, warning=F, message=F}
 library(ggplot2)
 library(quanteda.textplots)
 
@@ -135,6 +131,12 @@ load_analysis_object <- function(object_name) {
 }
 ```
 
+## Data
+
+There will be two articles from each news source. “Article 1” will be the oldest article addressing Sonya Massey, and the “Article 2” will be the article directly after the oldest article. This study addresses the first question by finding the frequency of the words in the articles and comments that refer to the themes "Police" or "Massey." The frequency of these themes (measured by the word count)  in the articles are correlated to the themes present within the corresponding article’s comments. There will be a correlational comparison between “article 1” and “article 2” to explore effects of introducing new information. Both will be tested using a chi-square fitness of goodness test. 
+
+
+
 ```{r, eval=F, echo=F, warning=F, messages=F}
 tokens <- data.frame(
   doc_id = docnames(tokens_obj),
@@ -146,7 +148,6 @@ tokens <- data.frame(
 ```
 
 ```{r, include=F, warning=F, message=F}
-
 df <- read.csv("./data/analysis_objects/tokens_metadata.csv")
 df
 
