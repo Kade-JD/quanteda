@@ -104,7 +104,7 @@ There will be two articles from each news source. “Article 1” will be the ol
 
 ## Method
 
-```{r, eval=F}
+```{r, eval=F, warning=F, message=F}
 library(ggplot2)
 library(quanteda.textplots)
 
@@ -135,7 +135,18 @@ load_analysis_object <- function(object_name) {
 }
 ```
 
-```{r, echo=F, warning=F, messages=F}
+```{r, eval=F, echo=F, warning=F, messages=F}
+tokens <- data.frame(
+  doc_id = docnames(tokens_obj),
+  tokens = sapply(as.list(tokens_obj), paste, collapse = "|"),
+  source = docvars(tokens_obj, "source"),
+  type = docvars(tokens_obj, "type"),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r, include=F, warning=F, message=F}
+
 df <- read.csv("./data/analysis_objects/tokens_metadata.csv")
 df
 
@@ -145,7 +156,7 @@ str(df)
 
 ```
 
-```{r, messages=F, warning=F}
+```{r, echo=F, messages=F, warning=F}
 tokens %>% 
   as.tibble() %>% 
   select(doc_id, source, type) %>% 
@@ -154,11 +165,41 @@ tokens %>%
 
 # Findings
 
-```{r}
+```{r, echo=F, warning=F, message=F}
+
+tokens %>%
+  filter(!is.na(type), type != "") %>%
+  count(type) %>%
+  ggplot(aes(reorder(type, n), n)) +
+  geom_col(fill = "#56B4E9", width = 0.7) +
+  geom_text(aes(label = n), hjust = -0.3, size = 3.5) +
+  coord_flip() +
+  labs(title = "Content Type Distribution", 
+       subtitle = "News Articles vs User Comments",
+       x = NULL, y = "Count") +
+  theme_minimal()
 
 
 ```
 
+```{r, echo=F, warning=F, message=F}
+library(tidytext)
+
+tokens %>%
+  unnest_tokens(token, tokens, token = "regex", pattern = "\\|") %>%
+  filter(!token %in% c("", " ")) %>%
+  count(token, sort = TRUE) %>%
+  slice_max(n, n = 20) %>%
+  mutate(token = reorder(token, n)) %>%
+  ggplot(aes(n, token)) +
+  geom_col(fill = "#009E73", width = 0.7) +
+  geom_text(aes(label = n), hjust = -0.3, size = 3.5) +
+  labs(title = "Top 20 Term Frequencies", 
+       subtitle = "Across All Documents",
+       x = "Frequency", y = NULL) +
+  theme_minimal()
+
+```
 
 # Discussion
 

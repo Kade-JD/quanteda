@@ -80,32 +80,49 @@ docvars(doc_corpus, "type") <- ifelse(
 )
 
 # TEXT PROCESSING --------------------------------------------
+library(quanteda)
+# install.packages("textclean")
+library(textclean)
+
 tokens_obj <- doc_corpus %>%
-  tokens(remove_punct = TRUE, 
-         remove_numbers = TRUE,
-         remove_url = TRUE) %>%
+  # 1. Pre-Cleaning (BEFORE tokenization)
+  textclean::replace_non_ascii() %>%
+  textclean::replace_contraction() %>%
+  textclean::replace_word_elongation() %>%
+  
+  # 2. Tokenization
+  tokens(
+    remove_punct = TRUE,
+    remove_numbers = TRUE,
+    remove_url = TRUE,
+    padding = FALSE  # Critical for phrase protection
+  ) %>%
+  
+  # 3. Post-Tokenization Cleaning
   tokens_remove(
     pattern = c(
-      "\\p{So}",      # Remove symbols/emojis
-      "\\p{C}",       # Remove control chars
-      "^\\p{Pd}$",    # Remove standalone hyphens
-      "\\b\\w{1,2}\\b", # Remove 1-2 letter words
-      "comment", # the word comment
-      "said", # the word said
-      "say", # the word say
-      "share", # the word share
-      "show", # the word show
-      "just",
-      "repli"
+      "\\p{So}", 
+      "\\p{C}",
+      "^\\p{Pd}$",
+      "\\b\\w{1}\\b",  # Remove single letters
+      stopwords("en"),
+      "comment", "said", "say", "share", "show", "just"
     ),
     valuetype = "regex"
   ) %>%
-  tokens_remove(stopwords("en")) %>%
+  
+  # 4. Stemming Protection
   tokens_replace(
-    pattern = c("â", "’", "‘", "“", "”"),
-    replacement = c("", "'", "'", "\"", "\"")
+    pattern = lexicon::hash_lemmas$token,
+    replacement = lexicon::hash_lemmas$lemma
   ) %>%
-  tokens_wordstem()
+  
+  # 5. Targeted Fixes
+  tokens_replace(
+    pattern = c("polic", "deputi", "repli", "juli"),
+    replacement = c("police", "deputy", "reply", "julie")  # Verify context
+  )
+
 
 # ANALYSIS ---------------------------------------------------
 news_dfm <- dfm(tokens_obj) %>%
